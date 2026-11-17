@@ -483,7 +483,7 @@ MCR.screens = MCR.screens || {};
     const loserId = S.pair.find((x) => x !== winnerId);
     MCR.ui.recordWithUndo({
       gameId: 'almohadazo',
-      playerIds: S.pair.slice(),
+      playerIds: MCR.ui.withSwapped(S, S.pair),
       winners: [winnerId],
       meta: {
         // configurations[i] corresponde a pair[i], igual que counts[i].

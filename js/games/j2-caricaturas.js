@@ -3,18 +3,18 @@ MCR.screens = MCR.screens || {};
 
 /* =========================================================
    Juego 02 — Caricaturas eléctricas
-   3 jugadores · categorías · 3 reemplazos · 2 finalistas
+   3 jugadores · categorías · 2 reemplazos (5 en total) · 2 finalistas
 
    Reglas de flujo (deben coincidir con el texto de viewRules):
      · Empiezan 3 (S.current). Cada eliminación usa un reemplazo mientras
        S.replaces < MAX_REPLACES y haya alguien disponible.
      · Sin reemplazos (agotados o sin gente) → con 2 en pie se juega la final.
-     · Máximo de participantes: 3 + 3 = 6.
+     · Máximo de participantes: 3 + 2 = 5 (un solo ganador).
    ========================================================= */
 
 (function () {
   const { h } = MCR.ui;
-  const MAX_REPLACES = 3;
+  const MAX_REPLACES = 2;
 
   let S = null;
 
@@ -65,7 +65,7 @@ MCR.screens = MCR.screens || {};
       kicker: 'Juego 02',
       title: 'Caricaturas eléctricas',
       summary: 'Respuestas rápidas por categoría: di una palabra que corresponda, sin repetir y sin trabarte. Quien falla deja su lugar a alguien nuevo.',
-      details: ['Arrancan 3 personas', 'Hasta 3 reemplazos', 'Final de 2'],
+      details: ['Arrancan 3 personas', 'Hasta 2 reemplazos', 'Final de 2'],
       onContinue: () => { S.step = 'rules'; MCR.go('game:caricaturas'); }
     });
   }
@@ -78,10 +78,10 @@ MCR.screens = MCR.screens || {};
         'Arrancan tres personas. Quien conduce elige una categoría en la tablet y la anuncia en voz alta.',
         'Por turnos y sin pausas, cada quien dice una palabra que pertenezca a la categoría.',
         'Quien repite, se traba, tarda demasiado o dice algo que no corresponde queda fuera. Entra un reemplazo y se elige una categoría nueva.',
-        'Hay 3 reemplazos. Cuando se acaban, la siguiente persona eliminada deja a dos finalistas, que se enfrentan con una última categoría.'
+        'Hay 2 reemplazos, así que en total juegan 5. Cuando se acaban, la siguiente persona eliminada deja a dos finalistas, que se enfrentan con una última categoría.'
       ],
       win: 'Gana quien no falle en la final. Quien falla en la final queda en segundo lugar.',
-      facts: [['Arrancan', '3 personas'], ['Reemplazos', 'Hasta 3'], ['Final', '1 contra 1']],
+      facts: [['Arrancan', '3 personas'], ['Reemplazos', 'Hasta 2'], ['Final', '1 contra 1']],
       special: [
         'Las categorías ya usadas se bloquean; «Permitir repetir usadas» las vuelve a habilitar.',
         'Si alguien se retira a media ronda, márcalo como eliminado: entra un reemplazo.',

@@ -392,7 +392,7 @@ MCR.screens = MCR.screens || {};
         event: () => ({
           gameId: 'cascaron',
           // Quien se retiró antes de terminar no cuenta como participación completa.
-          playerIds: Array.from(new Set([].concat(S.saved, [S.loser].filter(Boolean)))),
+          playerIds: MCR.ui.withSwapped(S, [].concat(S.saved, [S.loser], S.left, S.right)),
           winners: invictos.slice(),
           meta: { loser: S.loser, invictos, duelos: S.round, retired: (S.retired || []).slice() }
         }),

@@ -391,7 +391,7 @@ MCR.screens = MCR.screens || {};
         route: 'game:sandwich',
         event: () => ({
           gameId: 'sandwich',
-          playerIds: [].concat(S.teams[0], S.teams[1]),
+          playerIds: MCR.ui.withSwapped(S, [].concat(S.teams[0], S.teams[1])),
           winners: winner == null ? [] : S.teams[winner].slice(),
           meta: { score: S.score.slice(), rounds: S.rounds, tiebreak: S.tiebreak }
         }),

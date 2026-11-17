@@ -30,7 +30,7 @@ MCR.data = {
 
   games: [
     { id: 'telefono',   n: 1, name: 'Teléfono descompuesto', sub: 'Películas', tag: 'Mímica en cadena', players: '2 equipos', icon: '📽️' },
-    { id: 'caricaturas',n: 2, name: 'Caricaturas eléctricas', sub: 'Palabras por categoría', tag: 'Eliminación', players: '3 + reemplazos', icon: '⚡' },
+    { id: 'caricaturas',n: 2, name: 'Caricaturas eléctricas', sub: 'Palabras por categoría', tag: 'Eliminación', players: '3 + 2 reemplazos', icon: '⚡' },
     { id: 'almohadazo', n: 3, name: 'Almohadazo', sub: 'Sílabas en pizarrón', tag: 'Duelo con tiempo', players: '1 vs 1', icon: '🥊' },
     { id: 'cascaron',   n: 4, name: 'Cascarón Piratas', sub: 'Piedra, papel o tijera', tag: 'Filas y castigos', players: '2 equipos', icon: '🥚' },
     { id: 'telacompro', n: 5, name: 'Te la compro', sub: 'Subasta de palabras', tag: 'Bluff', players: '5 jugadores', icon: '🔨' },

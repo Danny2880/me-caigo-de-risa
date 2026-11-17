@@ -787,7 +787,7 @@ MCR.screens = MCR.screens || {};
         route: 'game:telefono',
         event: () => ({
           gameId: 'telefono',
-          playerIds: Array.from(new Set([].concat(S.order[0], S.order[1]))),
+          playerIds: MCR.ui.withSwapped(S, [].concat(S.order[0], S.order[1])),
           winners,
           meta: { results: S.results.slice(), movies: S.titles.slice(), chains: [S.order[0].slice(), S.order[1].slice()] }
         }),

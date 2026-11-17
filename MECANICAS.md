@@ -83,11 +83,11 @@ adivina, sin reloj. Gana el equipo que acierta; ambos = empate; ninguno = nadie.
 Revancha: adivina quien antes empezaba la fila (rota el papel más visible).
 
 **Caricaturas eléctricas** — Arrancan 3; cada eliminación usa un reemplazo
-(máx. 3) mientras haya gente disponible. Sin reemplazos → final 1 vs 1 con una
-categoría. Gana quien no falla en la final.
+(máx. 2) mientras haya gente disponible: en total juegan 5. Sin reemplazos →
+final 1 vs 1 con una categoría. Gana quien no falla en la final.
 
 **Almohadazo** — 1 vs 1, un turno por persona con consignas distintas (modo
-contrario y otra sílaba en el turno 2), mismo tiempo. Gana quien escribe más
+libre; solo no se repite la misma consigna del turno 1), mismo tiempo. Gana quien escribe más
 palabras válidas; empate → muerte súbita hablada. Cada duelo se registra aparte.
 
 **Cascarón Piratas** — Dos filas; ganador del duelo sale a salvo, perdedor vuelve
@@ -186,7 +186,7 @@ sigue descansando. En Teléfono no hay «Todos / Ninguno»: si alguien descansa 
 ## 10. Cambio de jugador y película en grande (v7)
 
 - **🔄 Cambio** (arriba a la derecha durante la partida) en Teléfono, Almohadazo, Cascarón, Te la compro, Sándwich y Sin palabras: se elige quién sale y quién entra (buscador; se puede escribir un nombre nuevo). Quien entra toma el lugar exacto (equipo, turno, pareja, fila). Lo ya jugado (historial, resultados, eliminados, puntos) no cambia de dueño. Implementado en `MCR.ui.swapPlayer`.
-- **Caricaturas**: el botón del pie se llama «🔄 Cambio →» y usa su propio flujo de eliminado + reemplazo (máximo 3).
+- **Caricaturas**: el botón del pie se llama «🔄 Cambio →» y usa su propio flujo de eliminado + reemplazo (máximo 2, juegan 5).
 - **Teléfono**: «Mostrar película» abre una pantalla completa con el título enorme (`MCR.ui.reveal`); se cierra tocando en cualquier lugar, con la × o con Esc. Al tocar «🔄 Cambio · arranca 10 s» o «Terminó antes · cambio» la siguiente mímica empieza sola.
 
 ## 11. Marcar y confirmar (v8)
@@ -201,3 +201,11 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
   2. **Juego:** sílaba en grande y «Le toca a X». «✓ Dijo una buena» pasa el turno; «✕ Alguien falló →» avanza.
   3. **¿Quién falló?:** viene marcada quien tenía el turno; se puede cambiar y se confirma con botón.
   4. **Ganador:** se muestra quién gana; «← Corregir» o «Registrar duelo →». La consigna del desempate se guarda en el registro.
+
+## 13. Contador de partidas jugadas (v10)
+
+- El número que se muestra por persona es **partidas jugadas**: cada partida registrada suma +1 a todos los que participaron, ganen o pierdan (6 participantes → los 6 suben 1).
+- Las victorias son un dato aparte («🏆 ganó N») y no afectan las sugerencias.
+- Cuenta también a quien salió con 🔄 Cambio (`MCR.ui.withSwapped`) y, en Te la compro, a quien se retiró después de jugar al menos una ronda. «Descartar resultado» no suma a nadie.
+- Las sugerencias («Le toca», «Sugerido», «Sugerir N») ordenan por: menos partidas en total → menos veces en ese juego → hace más tiempo que jugó.
+- En Inicio, «Partidas jugadas por persona» lista primero a quien menos ha jugado (ausentes al final).

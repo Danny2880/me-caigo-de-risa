@@ -1,6 +1,6 @@
 window.MCR = window.MCR || {};
 MCR.screens = MCR.screens || {};
-MCR.BUILD = '2026-11-16 · v9 · almohadazo';
+MCR.BUILD = '2026-11-16 · v10 · partidas jugadas';
 console.info('Me caigo de risa · build', MCR.BUILD);
 
 /* =========================================================
@@ -132,9 +132,12 @@ console.info('Me caigo de risa · build', MCR.BUILD);
 
   function participationMap() {
     const wrap = h('div', { class: 'pmap' });
+    /* El número grande es cuántas PARTIDAS jugó cada quien (+1 por cada partida
+       registrada en la que participó, haya ganado o perdido). Quien menos ha jugado
+       va primero: es a quien le toca. Las victorias son solo un dato extra. */
     const list = MCR.store.rank().slice().sort((a, b) => {
-      if ((b.plays || 0) !== (a.plays || 0)) return (b.plays || 0) - (a.plays || 0);
-      if ((b.wins || 0) !== (a.wins || 0)) return (b.wins || 0) - (a.wins || 0);
+      if (!!a.absent !== !!b.absent) return a.absent ? 1 : -1;
+      if ((a.plays || 0) !== (b.plays || 0)) return (a.plays || 0) - (b.plays || 0);
       return a.name.localeCompare(b.name, 'es');
     });
     list.forEach((p, i) => {
@@ -143,16 +146,16 @@ console.info('Me caigo de risa · build', MCR.BUILD);
       wrap.append(h('div', {
         class: 'pmap-cell' + (p.absent ? ' is-absent' : ''),
         'data-p': String(Math.min(4, plays)),
-        title: p.name + ' · ' + plays + (plays === 1 ? ' juego' : ' juegos') + ' · ' + wins + (wins === 1 ? ' victoria' : ' victorias')
+        title: p.name + ' · jugó ' + plays + (plays === 1 ? ' partida' : ' partidas') + (wins ? ' · ganó ' + wins : '')
       },
         h('div', { class: 'pmap-rank' }, String(i + 1)),
         h('div', { class: 'pmap-info' },
           h('div', { class: 'pmap-name' }, p.name),
-          h('div', { class: 'pmap-sub' }, p.absent ? 'ausente' : wins + (wins === 1 ? ' victoria' : ' victorias'))
+          h('div', { class: 'pmap-sub' }, p.absent ? 'ausente' : !plays ? 'aún no juega' : wins ? '🏆 ganó ' + wins : '\u00a0')
         ),
         h('div', { class: 'center' },
           h('div', { class: 'pmap-num' }, String(plays)),
-          h('div', { class: 'pmap-lbl' }, plays === 1 ? 'vez' : 'veces')
+          h('div', { class: 'pmap-lbl' }, plays === 1 ? 'partida' : 'partidas')
         )
       ));
     });
@@ -196,7 +199,7 @@ console.info('Me caigo de risa · build', MCR.BUILD);
       ),
       h('div', { class: 'panel mt' },
         h('div', { class: 'row spread' },
-          h('div', { class: 'panel-title', style: { margin: 0 } }, 'Mapa de participación'),
+          h('div', { class: 'panel-title', style: { margin: 0 } }, 'Partidas jugadas por persona'),
           h('button', { class: 'btn btn-ghost mini', onclick: () => MCR.go('players') }, 'Pasar lista →')
         ),
         h('div', { class: 'mt' }, MCR.ui.participationMap()),
@@ -370,7 +373,7 @@ console.info('Me caigo de risa · build', MCR.BUILD);
         MCR.ui.avatar(p.name),
         h('div', { class: 'grow' },
           h('div', { class: 'trow-name' }, p.name),
-          h('div', { class: 'trow-meta' }, (s.plays ? s.plays + (s.plays === 1 ? ' partida' : ' partidas') : 'sin jugar') + (s.wins ? ' · ' + s.wins + (s.wins === 1 ? ' victoria' : ' victorias') : ''))
+          h('div', { class: 'trow-meta' }, (s.plays ? 'Jugó ' + s.plays + (s.plays === 1 ? ' partida' : ' partidas') : 'Aún no juega') + (s.wins ? ' · 🏆 ganó ' + s.wins : ''))
         ),
         h('button', {
           class: 'presence-toggle' + (isPresent ? ' on' : ''),

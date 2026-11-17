@@ -574,7 +574,7 @@ MCR.screens = MCR.screens || {};
         route: 'game:sinpalabras',
         event: () => ({
           gameId: 'sinpalabras',
-          playerIds: Array.from(new Set(S.pairs.flatMap((p) => [p.guesser, p.clue]).filter(Boolean))),
+          playerIds: MCR.ui.withSwapped(S, S.pairs.flatMap((p) => [p.guesser, p.clue])),
           winners: Array.from(new Set(winners)),
           meta: {
             results: S.results.map((r) => ({ correct: r.correct, passed: r.passed })),

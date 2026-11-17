@@ -246,7 +246,15 @@ MCR.ui = (function () {
      «🔄 Cambio»: alguien sale a media partida y otra persona toma su lugar exacto
      (equipo, turno, pareja, fila). Se reemplaza el id en el estado del juego salvo en
      el historial ya jugado, así lo registrado no cambia de dueño. */
-  const SWAP_KEEP = ['history', 'results', 'rounds', 'log', 'eliminated', 'saved', 'losses'];
+  const SWAP_KEEP = ['history', 'results', 'rounds', 'log', 'eliminated', 'saved', 'losses', 'swappedOut'];
+
+  /* Participantes de la partida para el registro: los que terminaron + quienes
+     salieron con 🔄 Cambio (sí jugaron una parte). Vacía la lista para la siguiente. */
+  function withSwapped(S, ids) {
+    const all = Array.from(new Set([].concat(ids || [], S.swappedOut || []).filter(Boolean)));
+    S.swappedOut = [];
+    return all;
+  }
 
   function idsIn(obj, out, skip) {
     out = out || new Set();
@@ -295,6 +303,8 @@ MCR.ui = (function () {
     const apply = (inId) => {
       const outName = MCR.store.nameOf(outId);
       replaceId(opts.S, outId, inId);
+      opts.S.swappedOut = (opts.S.swappedOut || []).filter((x) => x !== inId);
+      if (!opts.S.swappedOut.includes(outId)) opts.S.swappedOut.push(outId);
       close();
       if (opts.onSwap) opts.onSwap(outId, inId);
       MCR.go(opts.route);
@@ -1407,7 +1417,7 @@ MCR.ui = (function () {
   }
 
   return {
-    h, clear, fmt, durationText, durationPicker, initials, avatar, toast, dialog, confirm, reveal, swapPlayer, choiceGrid, confirmBtn, ring, countdown,
+    h, clear, fmt, durationText, durationPicker, initials, avatar, toast, dialog, confirm, reveal, swapPlayer, withSwapped, choiceGrid, confirmBtn, ring, countdown,
     newTimer, timerView, endGame, recordWithUndo, finishBar,
     shell, gameNavigation, playerGrid, playerMeta, peoplePicker, fairOrder, searchIcon, picker, playerList, quickAdd,
     columnOrder, setupHead, stepBar, gameFlow, gameIntro, gameRulesPage, ruleGuide, teamRow, teamBoard, teamBalance

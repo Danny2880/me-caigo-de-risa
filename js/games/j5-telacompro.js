@@ -364,7 +364,11 @@ MCR.screens = MCR.screens || {};
         route: 'game:telacompro',
         event: () => ({
           gameId: 'telacompro',
-          playerIds: S.order.filter((id) => !S.rounds.some((r) => r.retired && r.out === id)),
+          /* Quien se retiró cuenta si alcanzó a jugar al menos una ronda. */
+          playerIds: MCR.ui.withSwapped(S, S.order.filter((id) => {
+            const k = S.rounds.findIndex((r) => r.retired && r.out === id);
+            return k < 0 || S.rounds.slice(0, k).some((r) => !r.retired);
+          })),
           winners: champion ? [champion] : [],
           meta: { rounds: S.rounds.filter((r) => !r.retired).length }
         }),
