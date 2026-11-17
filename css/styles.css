@@ -3194,3 +3194,21 @@ details > summary { color: var(--ink); }
 @media (max-width: 560px) { .swap-actions > * { flex: 1 1 100%; } }
 .pp-row.single.on { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
 .pp-row.single.on .pp-avatar { background: var(--primary); color: #fff; font-weight: 800; }
+
+/* ---------- v9 · muerte súbita por pasos ---------- */
+.sud-track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.sud-track li { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--line); color: var(--muted); font-size: 13.5px; font-weight: 600; min-width: 0; }
+.sud-track li span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sud-track .sud-n { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line-2); font-size: 12px; }
+.sud-track li.done { color: var(--ink-2); }
+.sud-track li.done .sud-n { background: var(--accent-soft); border-color: var(--accent-line); color: var(--violet); }
+.sud-track li.now { background: var(--accent-soft); border-color: var(--accent-line); color: var(--ink); }
+.sud-track li.now .sud-n { background: var(--primary); border-color: var(--primary); color: #fff; }
+.sud-turn { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 14px 0 6px; padding: 12px 26px; border-radius: 18px; background: var(--gold-bg); border: 1px solid var(--gold-line); }
+.sud-turn-l { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--gold-ink); }
+.sud-turn-name { font-size: clamp(24px, 4vw, 38px); font-weight: 900; color: var(--ink); }
+@media (max-width: 560px) {
+  .sud-track { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .sud-track li { flex-direction: column; gap: 4px; padding: 6px 4px; font-size: 11px; text-align: center; }
+  .sud-track li span:last-child { white-space: normal; line-height: 1.15; }
+}

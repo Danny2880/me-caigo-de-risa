@@ -192,3 +192,12 @@ sigue descansando. En Teléfono no hay «Todos / Ninguno»: si alguien descansa 
 ## 11. Marcar y confirmar (v8)
 
 Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el botón principal del pie confirma («Confirmar · sale X →», «✓ Confirmar · entra X», «🏆 Confirmar · ganó X»). Tocar de nuevo desmarca. Aplica a: Caricaturas (quién sale, quién entra, ganador de la final), Almohadazo (muerte súbita), Te la compro (quién compró y a quién) y la ventana 🔄 Cambio de todos los juegos (quién sale → Siguiente; quién entra → Confirmar). Helpers: `MCR.ui.choiceGrid` y `MCR.ui.confirmBtn`. Los botones con resultado explícito («Gana X» en Cascarón, «Sí lo logró / No lo logró» en Te la compro) siguen siendo directos porque ya son la confirmación.
+
+## 12. Almohadazo: consigna libre y muerte súbita por pasos (v9)
+
+- **Turno 2:** «Empiezan» y «Terminan» siempre están disponibles para cualquier duelista. Solo se bloquea repetir exactamente la consigna del turno 1 (mismo modo y misma sílaba).
+- **Muerte súbita** (empate) en 4 pasos con indicador visible:
+  1. **Consigna:** modo libre + sílaba nueva (las del duelo en ese modo quedan bloqueadas) o «🎲 Al azar».
+  2. **Juego:** sílaba en grande y «Le toca a X». «✓ Dijo una buena» pasa el turno; «✕ Alguien falló →» avanza.
+  3. **¿Quién falló?:** viene marcada quien tenía el turno; se puede cambiar y se confirma con botón.
+  4. **Ganador:** se muestra quién gana; «← Corregir» o «Registrar duelo →». La consigna del desempate se guarda en el registro.

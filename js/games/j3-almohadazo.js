@@ -6,9 +6,12 @@ MCR.screens = MCR.screens || {};
    Duelo 1 vs 1 · sílabas · pizarrón · tiempo · muerte súbita
 
    Cada duelista juega un turno propio (S.current = 0 y luego 1) con su propia
-   consigna en S.configs[i] = { pos: 'ini' | 'fin', syl }. El segundo turno debe
-   usar el modo contrario y otra sílaba. El tiempo (S.seconds) se fija en el primer
-   turno y es idéntico para ambos: el segundo no lo puede cambiar.
+   consigna en S.configs[i] = { pos: 'ini' | 'fin', syl }. En cada turno se elige
+   libremente «Empiezan» o «Terminan»; solo se impide repetir exactamente la misma
+   consigna del primer turno. El tiempo (S.seconds) se fija en el primer turno y es
+   idéntico para ambos: el segundo no lo puede cambiar.
+   Empate → muerte súbita en 4 pasos (S.sud): consigna → juego hablado por turnos →
+   quién falló (marcar + confirmar) → ganador (revisar + registrar).
    Cada duelo se registra al terminar; «Siguiente duelo» empieza otro con dos
    personas nuevas, conservando la lista de duelos de la sesión (S.history).
    ========================================================= */
@@ -91,11 +94,11 @@ MCR.screens = MCR.screens || {};
       goal: 'Escribir en el pizarrón más palabras válidas que tu rival.',
       steps: [
         'Se enfrentan dos personas. Cada una juega su propio turno, con una consigna distinta.',
-        'Antes de cada turno se elige si las palabras deben empezar o terminar con una sílaba, y cuál. El segundo turno usa el modo contrario y otra sílaba.',
+        'Antes de cada turno se elige si las palabras deben empezar o terminar con una sílaba, y cuál. Cada turno puede elegir cualquiera de los dos modos; solo no se repite la misma consigna.',
         'Al iniciar el reloj, la persona escribe en el pizarrón todas las palabras que pueda. Las dos tienen exactamente el mismo tiempo.',
         'Al terminar cada turno, cuenten en voz alta las palabras válidas y regístrenlas.'
       ],
-      win: 'Gana quien tenga más palabras válidas. Si empatan, muerte súbita: dicen palabras en voz alta por turnos y pierde quien se equivoque, repita o se quede sin respuesta.',
+      win: 'Gana quien tenga más palabras válidas. Si empatan, muerte súbita: se elige una consigna nueva, dicen palabras en voz alta por turnos y pierde quien se equivoque, repita o se quede sin respuesta.',
       facts: [['Duelo', '1 contra 1'], ['Tiempo', 'El mismo para ambos'], ['Empate', 'Muerte súbita']],
       special: [
         'No cuenta una palabra repetida, mal escrita o que no cumpla la sílaba.',
@@ -148,6 +151,11 @@ MCR.screens = MCR.screens || {};
 
   /* ---------- sílaba + tiempo ---------- */
 
+  /* Solo se bloquea repetir exactamente la consigna del primer turno. */
+  function sameAsFirst() {
+    return S.current === 1 && !!S.configs[0] && !!S.syl && S.configs[0].pos === S.pos && S.configs[0].syl.s === S.syl.s;
+  }
+
   function viewSyllable() {
     const content = MCR.store.get().content;
     const list = S.pos === 'ini' ? content.syllablesIni : content.syllablesFin;
@@ -156,23 +164,24 @@ MCR.screens = MCR.screens || {};
       MCR.ui.setupHead({
         step: 'Turno ' + (S.current + 1) + ' de 2 · ' + MCR.store.nameOf(S.pair[S.current]),
         title: 'Consigna para ' + MCR.store.nameOf(S.pair[S.current]),
-        sub: S.current === 0 ? 'Elige si las palabras deben empezar o terminar con la sílaba, cuál, y el tiempo del duelo.' : 'Este turno usa el modo contrario y otra sílaba.'
+        sub: S.current === 0 ? 'Elige si las palabras deben empezar o terminar con la sílaba, cuál, y el tiempo del duelo.' : 'Elige libremente «Empiezan» o «Terminan» y la sílaba. Solo no puede ser exactamente la misma consigna del primer turno.'
       }),
       h('div', { class: 'panel' },
         S.current === 1 ? h('p', { class: 'stage-note', style: { textAlign: 'left', margin: '0 0 12px' } },
-          'El primer duelista eligió ' + (S.configs[0].pos === 'ini' ? 'sílaba inicial' : 'sílaba final') + ' «' + S.configs[0].syl.s + '». Elige el modo contrario y otra sílaba.') : null,
+          MCR.store.nameOf(S.pair[0]) + ' jugó «' + configText(S.configs[0]) + '». Puedes usar cualquiera de los dos modos.') : null,
         h('div', { class: 'row spread' },
           h('h2', { style: { fontSize: '24px' } }, '¿Empiezan o terminan con la sílaba?'),
           h('div', { class: 'segmented', role: 'group', 'aria-label': 'Posición de la sílaba' },
-            h('button', { class: 'btn' + (S.pos === 'ini' ? ' seg-on' : ''), 'aria-pressed': String(S.pos === 'ini'), disabled: S.current === 1 && S.configs[0].pos === 'ini', onclick: () => { S.pos = 'ini'; S.syl = null; MCR.go('game:almohadazo'); } }, 'Empiezan'),
-            h('button', { class: 'btn' + (S.pos === 'fin' ? ' seg-on' : ''), 'aria-pressed': String(S.pos === 'fin'), disabled: S.current === 1 && S.configs[0].pos === 'fin', onclick: () => { S.pos = 'fin'; S.syl = null; MCR.go('game:almohadazo'); } }, 'Terminan')
+            h('button', { class: 'btn' + (S.pos === 'ini' ? ' seg-on' : ''), 'aria-pressed': String(S.pos === 'ini'), onclick: () => { S.pos = 'ini'; S.syl = null; MCR.go('game:almohadazo'); } }, 'Empiezan'),
+            h('button', { class: 'btn' + (S.pos === 'fin' ? ' seg-on' : ''), 'aria-pressed': String(S.pos === 'fin'), onclick: () => { S.pos = 'fin'; S.syl = null; MCR.go('game:almohadazo'); } }, 'Terminan')
           )
         ),
         h('div', { class: 'tiny', style: { margin: '18px 0 10px' } }, S.pos === 'ini' ? 'Sílabas iniciales' : 'Terminaciones'),
         h('div', { class: 'syl-grid' }, list.map((x) =>
           h('button', {
             class: 'opt syl' + (S.syl && S.syl.s === x.s ? ' sel' : ''),
-            disabled: S.current === 1 && S.configs[0].syl.s === x.s,
+            disabled: S.current === 1 && S.configs[0].pos === S.pos && S.configs[0].syl.s === x.s,
+            title: S.current === 1 && S.configs[0].pos === S.pos && S.configs[0].syl.s === x.s ? 'Ya la usó ' + MCR.store.nameOf(S.pair[0]) : null,
             onclick: () => { S.syl = x; MCR.go('game:almohadazo'); }
           }, x.s)
         ))
@@ -199,9 +208,9 @@ MCR.screens = MCR.screens || {};
           MCR.go('game:almohadazo');
         },
         backLabel: S.current === 0 ? '← Duelistas' : '← Recuento anterior',
-        info: !S.syl ? 'Elige una sílaba' : S.current === 1 && (S.configs[0].pos === S.pos || S.configs[0].syl.s === S.syl.s) ? 'Elige una configuración diferente' : 'Configuración lista',
-        ok: !!S.syl && !(S.current === 1 && S.configs[0] && (S.configs[0].pos === S.pos || S.configs[0].syl.s === S.syl.s)),
-        disabled: !S.syl || (S.current === 1 && S.configs[0] && (S.configs[0].pos === S.pos || S.configs[0].syl.s === S.syl.s)),
+        info: !S.syl ? 'Elige una sílaba' : sameAsFirst() ? 'Es la misma consigna del primer turno: elige otra' : 'Configuración lista',
+        ok: !!S.syl && !sameAsFirst(),
+        disabled: !S.syl || sameAsFirst(),
         next: () => {
           S.configs[S.current] = { pos: S.pos, syl: S.syl };
           if (S.current === 0) S.counts = [0, 0];
@@ -312,7 +321,12 @@ MCR.screens = MCR.screens || {};
             'Muerte súbita: ahora contestan hablado, 1 × 1, sin escribir. Pierde el primero que se equivoque, repita o se quede sin palabras.')
         ),
         h('div', { class: 'action-bar' },
-          h('button', { class: 'btn btn-gold btn-xl', onclick: () => { S.sudden = true; S.step = 'sudden'; MCR.go('game:almohadazo'); } }, '⚡ Ir a muerte súbita')
+          h('button', { class: 'btn btn-gold btn-xl', onclick: () => {
+            S.sudden = true;
+            S.sud = { phase: 'setup', pos: 'ini', syl: null, turn: 0, loser: null };
+            S.step = 'sudden';
+            MCR.go('game:almohadazo');
+          } }, '⚡ Ir a muerte súbita')
         )
       );
     }
@@ -344,37 +358,115 @@ MCR.screens = MCR.screens || {};
   /* ---------- muerte súbita ---------- */
 
   function viewSudden() {
-    const content = MCR.store.get().content;
-    const list = S.pos === 'ini' ? content.syllablesIni : content.syllablesFin;
+    const go = () => MCR.go('game:almohadazo');
+    if (!S.sud) S.sud = { phase: 'setup', pos: S.pos || 'ini', syl: S.syl || null, turn: 0, loser: null };
+    const D = S.sud;
+    const A = S.pair[0];
+    const B = S.pair[1];
+    const nm = MCR.store.nameOf;
+    const phases = ['Consigna', 'Juego', '¿Quién falló?', 'Ganador'];
+    const idx = { setup: 0, play: 1, lose: 2, confirm: 3 }[D.phase] || 0;
+    const track = h('ol', { class: 'sud-track', 'aria-label': 'Pasos de la muerte súbita' }, phases.map((t, i) =>
+      h('li', { class: (i < idx ? 'done' : '') + (i === idx ? ' now' : ''), 'aria-current': i === idx ? 'step' : null },
+        h('span', { class: 'sud-n' }, i < idx ? '✓' : String(i + 1)), h('span', null, t))
+    ));
+    const consigna = () => (D.pos === 'ini' ? 'Palabras que empiezan con' : 'Palabras que terminan con') + ' «' + D.syl.s + '»';
 
-    if (!S.syl) return h('div', {});
-    const loseSel = S.pair.includes(S.sel) ? S.sel : null;
+    /* 1 · consigna nueva: modo libre y sílaba (sin repetir las del duelo). */
+    if (D.phase === 'setup') {
+      const content = MCR.store.get().content;
+      const list = D.pos === 'ini' ? content.syllablesIni : content.syllablesFin;
+      const usedHere = S.configs.filter((c) => c && c.pos === D.pos).map((c) => c.syl.s);
+      const free = list.filter((x) => !usedHere.includes(x.s));
+      return h('div', { class: 'grid' },
+        track,
+        h('div', { class: 'panel' },
+          h('div', { class: 'eyebrow' }, '⚡ Muerte súbita · empate ' + S.counts[0] + ' — ' + S.counts[1]),
+          h('div', { class: 'row spread' },
+            h('h2', { style: { fontSize: '24px' } }, 'Consigna para el desempate'),
+            h('div', { class: 'segmented', role: 'group', 'aria-label': 'Posición de la sílaba' },
+              h('button', { class: 'btn' + (D.pos === 'ini' ? ' seg-on' : ''), 'aria-pressed': String(D.pos === 'ini'), onclick: () => { D.pos = 'ini'; D.syl = null; go(); } }, 'Empiezan'),
+              h('button', { class: 'btn' + (D.pos === 'fin' ? ' seg-on' : ''), 'aria-pressed': String(D.pos === 'fin'), onclick: () => { D.pos = 'fin'; D.syl = null; go(); } }, 'Terminan')
+            )
+          ),
+          h('div', { class: 'row spread', style: { margin: '14px 0 10px' } },
+            h('span', { class: 'tiny' }, D.pos === 'ini' ? 'Sílabas iniciales' : 'Terminaciones'),
+            h('button', { class: 'btn btn-quiet mini', onclick: () => { D.syl = free[Math.floor(Math.random() * free.length)] || null; go(); } }, '🎲 Al azar')
+          ),
+          h('div', { class: 'syl-grid' }, list.map((x) =>
+            h('button', {
+              class: 'opt syl' + (D.syl && D.syl.s === x.s ? ' sel' : ''),
+              disabled: usedHere.includes(x.s),
+              title: usedHere.includes(x.s) ? 'Ya se usó en este duelo' : null,
+              onclick: () => { D.syl = x; go(); }
+            }, x.s)
+          ))
+        ),
+        h('div', { class: 'action-bar' },
+          h('div', { class: 'action-bar-info' }, D.syl ? consigna() : 'Elige la sílaba del desempate'),
+          h('button', { class: 'btn btn-gold btn-xl', disabled: !D.syl, onclick: () => { D.phase = 'play'; D.turn = 0; go(); } }, '⚡ Empezar muerte súbita →')
+        )
+      );
+    }
 
+    /* 2 · juego hablado, por turnos, sin reloj. */
+    if (D.phase === 'play') {
+      const now = S.pair[D.turn];
+      const next = S.pair[1 - D.turn];
+      return h('div', { class: 'grid stage-screen' },
+        h('div', { class: 'hide-in-visual' }, track),
+        h('div', { class: 'stage' },
+          h('div', { class: 'stage-label' }, 'Muerte súbita · hablado, 1 × 1, sin tiempo'),
+          h('div', { class: 'stage-word' }, (D.pos === 'ini' ? '' : '…') + D.syl.s + (D.pos === 'ini' ? '…' : '')),
+          h('div', { class: 'stage-note' }, consigna()),
+          h('div', { class: 'sud-turn' },
+            h('span', { class: 'sud-turn-l' }, 'Le toca a'),
+            h('span', { class: 'sud-turn-name' }, nm(now))
+          ),
+          h('div', { class: 'stage-note' }, 'Pierde quien se equivoque, repita una palabra o se quede sin respuesta.')
+        ),
+        h('div', { class: 'action-bar' },
+          h('button', { class: 'btn btn-ghost', onclick: () => { D.phase = 'setup'; go(); } }, '← Cambiar consigna'),
+          h('button', { class: 'btn btn-ghost', onclick: () => { D.turn = 1 - D.turn; go(); } }, '✓ Dijo una buena · turno de ' + nm(next)),
+          h('button', { class: 'btn btn-gold btn-xl', onclick: () => { D.loser = now; D.phase = 'lose'; go(); } }, '✕ Alguien falló →')
+        )
+      );
+    }
+
+    /* 3 · quién falló: marcar y confirmar (sugiere a quien tenía el turno). */
+    if (D.phase === 'lose') {
+      const sel = S.pair.includes(D.loser) ? D.loser : null;
+      return h('div', { class: 'grid' },
+        track,
+        h('div', { class: 'panel center' },
+          h('div', { class: 'eyebrow' }, 'Muerte súbita · ' + consigna()),
+          h('h2', { style: { fontSize: 'clamp(22px,3.4vw,32px)', marginBottom: '6px' } }, '¿Quién falló?'),
+          h('p', { class: 'stage-note', style: { margin: '0 auto 16px' } }, 'Ya está marcada la persona que tenía el turno. Si falló la otra, tócala.'),
+          MCR.ui.choiceGrid({ ids: S.pair, value: sel, key: 'sud-lose', toggle: false, onSelect: (id) => { D.loser = id; go(); } })
+        ),
+        h('div', { class: 'action-bar' },
+          h('button', { class: 'btn btn-ghost', onclick: () => { D.phase = 'play'; go(); } }, '← Seguir jugando'),
+          MCR.ui.confirmBtn(sel, (n) => 'Confirmar · falló ' + n + ' →', () => { D.phase = 'confirm'; go(); })
+        )
+      );
+    }
+
+    /* 4 · ganador: revisar y registrar. */
+    const loser = D.loser;
+    const winner = S.pair.find((x) => x !== loser);
     return h('div', { class: 'grid' },
+      track,
       h('div', { class: 'stage' },
-        h('div', { class: 'stage-label' }, 'Muerte súbita · sin tiempo'),
-        h('div', { class: 'stage-word sm' }, '«' + S.syl.s + '»'),
-        h('div', { class: 'stage-note' }, (S.pos === 'ini' ? 'Palabras que empiezan con' : 'Palabras que terminan con') + ' «' + S.syl.s + '». Hablado, 1 × 1.')
-      ),
-      h('div', { class: 'panel' },
-        h('div', { class: 'panel-title' }, 'Cambiar sílaba si quieres'),
-        h('div', { class: 'opt-grid' }, list.slice(0, 12).map((x) =>
-          h('button', {
-            class: 'opt syl' + (S.syl.s === x.s ? ' sel' : ''),
-            onclick: () => { S.syl = x; MCR.go('game:almohadazo'); }
-          }, x.s)
-        ))
-      ),
-      h('div', { class: 'panel' },
-        h('div', { class: 'panel-title' }, '¿Quién perdió la muerte súbita?'),
-        MCR.ui.choiceGrid({ ids: S.pair, value: loseSel, key: 'sudden', onSelect: (id) => { S.sel = id; MCR.go('game:almohadazo'); } })
+        h('div', { class: 'stage-label' }, '🏆 Gana por muerte súbita'),
+        h('div', { class: 'stage-word' }, nm(winner)),
+        h('div', { class: 'stage-note' }, nm(loser) + ' falló con «' + D.syl.s + '» · pizarrón ' + S.counts[0] + ' — ' + S.counts[1])
       ),
       h('div', { class: 'action-bar' },
-        h('div', { class: 'action-bar-info' }, loseSel ? 'Gana ' + MCR.store.nameOf(S.pair.find((x) => x !== loseSel)) : 'Toca a quien perdió'),
-        MCR.ui.confirmBtn(loseSel, (n) => 'Confirmar · perdió ' + n, (id) => {
-          S.sel = null;
-          closeRound(S.pair.find((x) => x !== id));
-        })
+        h('button', { class: 'btn btn-ghost', onclick: () => { D.phase = 'lose'; go(); } }, '← Corregir'),
+        h('button', { class: 'btn btn-gold btn-xl', onclick: () => {
+          S.syl = D.syl; S.pos = D.pos;
+          closeRound(winner);
+        } }, 'Registrar duelo →')
       )
     );
   }
@@ -398,7 +490,8 @@ MCR.screens = MCR.screens || {};
         pair: S.pair.slice(),
         configurations: S.configs.map((config) => ({ syllable: config.syl.s, position: config.pos })),
         counts: S.counts.slice(),
-        sudden: S.sudden
+        sudden: S.sudden,
+        suddenRule: S.sudden && S.sud && S.sud.syl ? { syllable: S.sud.syl.s, position: S.sud.pos } : null
       }
     }, 'Duelo registrado');
     // Antes se guardaba por ganador/perdedor y se cruzaban las sílabas: ahora se guarda por duelista.
