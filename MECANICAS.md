@@ -124,7 +124,7 @@ aciertos; empate en primer lugar = victoria compartida.
 pantalla previa al registro (para eso existe «Deshacer»).
 
 **Cierre de partida (`MCR.ui.finishBar`):** todos los juegos terminan con las
-mismas opciones: *Registrar y salir*, *Registrar y jugar otra / revancha* y
+mismas opciones: *Registrar · siguiente juego →* (vuelve a la pestaña Juegos), *Registrar y jugar otra / revancha* y
 *Descartar* (pide confirmación). Ya no existe ningún botón que descarte un
 resultado sin avisar.
 
@@ -209,3 +209,26 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 - Cuenta también a quien salió con 🔄 Cambio (`MCR.ui.withSwapped`) y, en Te la compro, a quien se retiró después de jugar al menos una ronda. «Descartar resultado» no suma a nadie.
 - Las sugerencias («Le toca», «Sugerido», «Sugerir N») ordenan por: menos partidas en total → menos veces en ese juego → hace más tiempo que jugó.
 - En Inicio, «Partidas jugadas por persona» lista primero a quien menos ha jugado (ausentes al final).
+
+## 14. Te la compro, Cascarón, fin de partida y jerarquía de pantallas (v11)
+
+**Te la compro**
+- Mesa de izquierda a derecha (orden de selección). Quien sale desaparece de la secuencia; abajo se lista «Fuera: …».
+- Cada ronda: quien abre hace la **apuesta inicial** («🔨 Te la compro» deshabilitado: «Aún no hay apuesta que comprar»). Luego el turno pasa a la derecha y del último vuelve al primero que siga en juego.
+- En su turno cada quien: **Sube a N palabras** (selector − N +, mínimo última + 1) o **🔨 Te la compro** a quien hizo la última apuesta (se determina sola).
+- Veredicto: «✓ Sí lo logró → sale quien compró» / «✕ No lo logró → sale quien apostó». Pantalla «Queda eliminado» con la mesa restante y quién abre la siguiente ronda (la persona a la derecha de quien abrió la anterior).
+- «↩ Deshacer apuesta» corrige toques; «se retira» quita a alguien sin romper la ronda.
+- Los dos botones del turno tienen ancho y alto fijos: el texto nunca cambia su tamaño.
+
+**Cascarón Piratas**
+- Duelo entre el primero de cada fila. Quien gana sale (a salvo) y no vuelve. Quien pierde va al final de **su** fila.
+- Si una fila queda vacía, el **último** de la otra fila pasa a ser el primero de la fila vacía. Se repite hasta que queda 1: el gran perdedor.
+
+**Fin de partida**: «Registrar · siguiente juego →» registra y regresa a la pestaña Juegos. «Descartar» también regresa a Juegos.
+
+**Jerarquía de pantallas de juego**
+1. Lo que se juega (palabra, letras, sílaba, categoría) es lo más grande (`.stage-word.hero` / `.mid`, letras de Sándwich `.sw-char`), con tamaño que depende del ancho y del alto.
+2. La acción de quien conduce (puntos de Sándwich, Paso/Correcta, Sube/Te la compro) va grande, justo debajo.
+3. El reloj es compacto arriba a la derecha (`.ring.compact`); los contadores y marcadores van discretos.
+- Sándwich: marcador discreto durante la partida («lleva N» dentro de cada botón); al final, marcador grande por equipo con sus integrantes.
+- Sin palabras: palabras largas (>9 letras) usan un tamaño adaptado para no partirse.

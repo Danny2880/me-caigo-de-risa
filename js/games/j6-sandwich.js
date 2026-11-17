@@ -293,13 +293,35 @@ MCR.screens = MCR.screens || {};
     MCR.go('game:sandwich');
   }
 
+  /* Marcador final: puntos grandes, integrantes de cada equipo y ganador marcado. */
   function scoreBoard(winner) {
-    const side = (i) => h('div', { class: 'score-side' + (winner === i ? ' win' : '') },
+    const side = (i) => h('div', { class: 'score-side sw-final-side team-' + i + (winner === i ? ' win' : '') },
+      h('div', { class: 'score-l' }, 'Equipo ' + (i + 1) + (winner === i ? ' · 🏆 gana' : '')),
       h('div', { class: 'score-n' }, String(S.score[i])),
-      h('div', { class: 'score-l' }, 'Equipo ' + (i + 1)),
-      S.tiebreak === i ? h('div', { class: 'score-meta' }, '+ desempate') : null
+      h('div', { class: 'score-meta' }, S.score[i] === 1 ? 'palabra' : 'palabras'),
+      S.tiebreak === i ? h('div', { class: 'score-meta' }, '+ ganó el desempate') : null,
+      h('div', { class: 'sw-members' }, (S.teams[i] || []).map((id) => MCR.store.nameOf(id)).join(' · '))
     );
-    return h('div', { class: 'score' }, side(0), h('div', { class: 'score-vs' }, 'VS'), side(1));
+    return h('div', { class: 'score sw-final' }, side(0), h('div', { class: 'score-vs' }, 'VS'), side(1));
+  }
+
+  /* Letras del par: lo más grande de la pantalla, con su papel debajo. */
+  function letters(veiled) {
+    const a = S.pair ? S.pair.a : '?';
+    const b = S.pair ? S.pair.b : '?';
+    return h('div', { class: 'sw-letters' + (veiled ? ' veiled' : ''), 'aria-label': veiled ? 'Par oculto' : 'Empieza con ' + a + ', termina con ' + b },
+      h('div', { class: 'sw-letter' }, h('span', { class: 'sw-char' }, veiled ? '?' : a), h('span', { class: 'sw-cap' }, 'empieza')),
+      h('span', { class: 'sw-dots', 'aria-hidden': 'true' }, '…'),
+      h('div', { class: 'sw-letter' }, h('span', { class: 'sw-char' }, veiled ? '?' : b), h('span', { class: 'sw-cap' }, 'termina'))
+    );
+  }
+
+  /* Botón de punto: la acción principal de la partida. El marcador va discreto adentro. */
+  function pointBtn(i, enabled, onClick, label) {
+    return h('button', { class: 'btn sw-point team-' + i, disabled: !enabled, onclick: onClick },
+      h('span', { class: 'sw-point-main' }, label || '✓ Equipo ' + (i + 1)),
+      h('span', { class: 'sw-point-sub' }, label ? 'gana el desempate' : 'encontró la palabra · lleva ' + S.score[i])
+    );
   }
 
   /* ---------- jugar ---------- */
@@ -329,23 +351,25 @@ MCR.screens = MCR.screens || {};
       MCR.ui.toast('Se quitó el último punto del Equipo ' + (i + 1));
     };
 
-    return h('div', { class: 'grid stage-screen' },
-      h('div', { class: 'stage sandwich-stage' },
-        h('div', { class: 'stage-label' }, 'Empieza con … termina con'),
-        h('div', { class: 'stage-word letters' + (t.status === 'idle' ? ' veiled' : '') },
-          h('span', null, S.pair ? S.pair.a : '?'), h('i', { 'aria-hidden': 'true' }, '…'), h('span', null, S.pair ? S.pair.b : '?')),
-        timer.ring,
+    timer.ring.classList.add('compact');
+    return h('div', { class: 'grid stage-screen play-layout' },
+      h('div', { class: 'stage sandwich-stage hero-stage' },
+        h('div', { class: 'stage-top' },
+          h('div', { class: 'stage-label' }, 'Palabra que empieza y termina con'),
+          timer.ring
+        ),
+        letters(t.status === 'idle'),
         t.status === 'idle' ? h('div', { class: 'stage-note' }, 'El par se revela al iniciar el reloj.') : null
       ),
-      h('div', { class: 'duel-actions' },
-        h('button', { class: 'btn btn-blue btn-xl', disabled: !live, onclick: () => point(0) }, '+1 Equipo 1'),
-        h('button', { class: 'btn btn-red btn-xl', disabled: !live, onclick: () => point(1) }, '+1 Equipo 2')
+      h('div', { class: 'sw-points' },
+        pointBtn(0, live, () => point(0)),
+        pointBtn(1, live, () => point(1))
       ),
-      h('div', { class: 'play-tools' },
-        h('button', { class: 'btn btn-ghost mini', disabled: !live, onclick: () => { resolvePair(); MCR.go('game:sandwich'); } }, 'Nadie la encuentra · saltar par'),
-        S.log.length ? h('button', { class: 'btn btn-ghost mini', onclick: undo }, '↶ Deshacer último punto') : null
+      h('div', { class: 'play-tools hide-in-visual' },
+        h('button', { class: 'btn btn-quiet mini', disabled: !live, onclick: () => { resolvePair(); MCR.go('game:sandwich'); } }, 'Nadie la encuentra · saltar par'),
+        S.log.length ? h('button', { class: 'btn btn-quiet mini', onclick: undo }, '↶ Deshacer último punto') : null,
+        h('span', { class: 'sw-mini-score', title: 'Marcador' }, 'Marcador ' + S.score[0] + ' — ' + S.score[1])
       ),
-      scoreBoard(S.score[0] === S.score[1] ? null : S.score[0] > S.score[1] ? 0 : 1),
       h('div', { class: 'action-bar' }, timer.controls)
     );
   }
@@ -355,15 +379,14 @@ MCR.screens = MCR.screens || {};
   function viewTiebreak() {
     const win = (i) => { S.tiebreak = i; S.step = 'end'; MCR.go('game:sandwich'); };
     return h('div', { class: 'grid stage-screen' },
-      h('div', { class: 'stage sandwich-stage' },
+      h('div', { class: 'stage sandwich-stage hero-stage' },
         h('div', { class: 'turn-badge' }, 'Empate ' + S.score[0] + ' — ' + S.score[1] + ' · par de desempate'),
-        h('div', { class: 'stage-word letters' },
-          h('span', null, S.pair ? S.pair.a : '?'), h('i', { 'aria-hidden': 'true' }, '…'), h('span', null, S.pair ? S.pair.b : '?')),
+        letters(false),
         h('div', { class: 'stage-note' }, 'Sin reloj. El primer equipo que diga una palabra válida gana.')
       ),
-      h('div', { class: 'duel-actions' },
-        h('button', { class: 'btn btn-blue btn-xl', onclick: () => win(0) }, 'Ganó Equipo 1'),
-        h('button', { class: 'btn btn-red btn-xl', onclick: () => win(1) }, 'Ganó Equipo 2')
+      h('div', { class: 'sw-points' },
+        pointBtn(0, true, () => win(0), '🏆 Equipo 1'),
+        pointBtn(1, true, () => win(1), '🏆 Equipo 2')
       ),
       h('div', { class: 'action-bar' },
         h('button', { class: 'btn btn-ghost', onclick: () => { resolvePair(); MCR.go('game:sandwich'); } }, 'Nadie la encuentra · otro par'),
@@ -381,9 +404,9 @@ MCR.screens = MCR.screens || {};
 
     return h('div', { class: 'grid stage-screen' },
       h('div', { class: 'result-head' },
-        h('div', { class: 'eyebrow' }, '¡Tiempo!'),
+        h('div', { class: 'eyebrow' }, '¡Tiempo! · Marcador final'),
         h('h2', { class: 'result-title' },
-          winner == null ? '¡Empate!' : 'Gana el Equipo ' + (winner + 1) + (S.tiebreak != null ? ' en el desempate' : ''))
+          winner == null ? '¡Empate ' + a + ' — ' + b + '!' : 'Gana el Equipo ' + (winner + 1) + ' · ' + Math.max(a, b) + ' a ' + Math.min(a, b) + (S.tiebreak != null ? ' (desempate)' : ''))
       ),
       scoreBoard(winner),
       h('p', { class: 'roster-note center' }, S.rounds + (S.rounds === 1 ? ' palabra encontrada' : ' palabras encontradas') + '. Los pares usados no vuelven a salir hasta agotar el mazo.'),

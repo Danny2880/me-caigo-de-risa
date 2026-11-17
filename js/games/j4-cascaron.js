@@ -6,8 +6,9 @@ MCR.screens = MCR.screens || {};
    Dos filas · "¡Piratas!" · el que pierde vuelve a formarse
 
    Mecánica (resolve): se enfrentan left[0] y right[0]. Quien gana sale a
-   S.saved; quien pierde vuelve al FINAL DE SU PROPIA fila. Si una fila queda
-   vacía, normalize() reparte a los que quedan en dos filas. Termina cuando queda
+   S.saved y ya no vuelve; quien pierde vuelve al FINAL DE SU PROPIA fila. Si una
+   fila queda vacía, normalize() pasa al ÚLTIMO de la otra fila a ser el primero de
+   la fila vacía (no se reparte a nadie más). Termina cuando queda
    una sola persona (S.loser, «gran perdedor»). Se registran como ganadores solo
    los invictos (se salvaron sin perder ningún duelo).
    Durante los duelos se puede retirar a alguien (✕) o sumar a quien llega tarde
@@ -64,7 +65,7 @@ MCR.screens = MCR.screens || {};
         'El grupo se divide en dos filas, una frente a la otra.',
         'Pasan al frente las primeras personas de cada fila y juegan piedra, papel o tijera diciendo «¡Pi-ra-tas!» en lugar de «piedra, papel o tijera».',
         'Quien gana queda a salvo y sale de la fila. Quien pierde vuelve al final de su propia fila y espera otro duelo.',
-        'Si una fila se vacía, la app reparte a quienes quedan en dos filas nuevas. Se sigue hasta que solo quede una persona.'
+        'Si una fila se queda vacía, el último de la otra fila pasa a ser el primero de la fila vacía. Se sigue hasta que solo quede una persona.'
       ],
       win: 'La última persona en riesgo es el gran perdedor y le toca el cascarón. Quienes se salvaron sin perder ningún duelo terminan invictos y suman una victoria.',
       facts: [['Participan', 'Todo el grupo · mínimo 2'], ['Duelo', '1 contra 1'], ['Termina', 'Cuando queda 1']],
@@ -268,18 +269,10 @@ MCR.screens = MCR.screens || {};
 
   /* ---------- duelo ---------- */
 
+  /* Fila vacía: el último de la otra fila pasa a encabezarla. */
   function normalize() {
-    if (S.left.length === 0 && S.right.length >= 2) {
-      const all = S.right.slice();
-      S.right = [];
-      S.left = [];
-      all.forEach((id, i) => (i % 2 === 0 ? S.left : S.right).push(id));
-    } else if (S.right.length === 0 && S.left.length >= 2) {
-      const all = S.left.slice();
-      S.left = [];
-      S.right = [];
-      all.forEach((id, i) => (i % 2 === 0 ? S.left : S.right).push(id));
-    }
+    if (S.left.length === 0 && S.right.length >= 2) S.left.push(S.right.pop());
+    else if (S.right.length === 0 && S.left.length >= 2) S.right.push(S.left.pop());
   }
 
   function resolve(winnerSide) {
@@ -302,13 +295,20 @@ MCR.screens = MCR.screens || {};
       S.left.push(loser);
     }
 
+    const beforeL = S.left.length;
+    const beforeR = S.right.length;
     normalize();
+    const moved = beforeL === 0 && S.left.length ? S.left[0] : beforeR === 0 && S.right.length ? S.right[0] : null;
 
     if (S.left.length + S.right.length <= 1) {
       S.loser = S.left[0] || S.right[0] || null;
       S.step = 'end';
     }
     MCR.go('game:cascaron');
+    if (S.step !== 'end') {
+      MCR.ui.toast('🛟 ' + MCR.store.nameOf(winner) + ' se salva · ' + MCR.store.nameOf(loser) + ' va al final de la fila ' + (winnerSide === 'left' ? 'derecha' : 'izquierda') +
+        (moved ? ' · ' + MCR.store.nameOf(moved) + ' pasa a encabezar la fila vacía' : ''));
+    }
   }
 
   function viewDuel() {

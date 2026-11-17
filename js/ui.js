@@ -604,11 +604,12 @@ MCR.ui = (function () {
     return h('div', { class: 'action-bar game-step-actions finish-bar' },
       h('button', { class: 'btn btn-quiet danger-text', onclick: () => {
         confirm('Descartar resultado', 'Esta partida no se guardará en el historial ni contará para la rotación. ¿Descartar?', 'Sí, descartar', true)
-          .then((ok) => { if (!ok) return; endGame(route); opts.reset(); MCR.go(route); toast('Resultado descartado'); });
+          .then((ok) => { if (!ok) return; endGame(route); opts.reset(); MCR.go('catalog'); toast('Resultado descartado · elige el siguiente juego'); });
       } }, 'Descartar'),
       h('div', { class: 'action-bar-info' }),
       h('button', { class: 'btn btn-ghost', onclick: () => { record(); opts.again(); MCR.go(route); } }, opts.againLabel || 'Registrar y jugar otra'),
-      h('button', { class: 'btn btn-gold btn-xl', onclick: () => { record(); opts.reset(); MCR.go('home'); } }, 'Registrar y salir')
+      /* Al terminar se vuelve a la pestaña Juegos para elegir el siguiente. */
+      h('button', { class: 'btn btn-gold btn-xl', onclick: () => { record(); opts.reset(); MCR.go('catalog'); } }, 'Registrar · siguiente juego →')
     );
   }
 

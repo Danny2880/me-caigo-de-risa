@@ -244,13 +244,18 @@ MCR.screens = MCR.screens || {};
       done: '¡Tiempo!'
     }[S.timer.status];
 
-    return h('div', { class: 'grid stage-screen' },
-      h('div', { class: 'stage' },
-        h('div', { class: 'turn-badge' }, 'Turno ' + (S.current + 1) + ' de 2'),
-        h('div', { class: 'stage-label' }, 'Escribe ' + MCR.store.nameOf(id)),
-        h('div', { class: 'stage-word' }, (S.pos === 'ini' ? '' : '…') + S.syl.s + (S.pos === 'ini' ? '…' : '')),
-        h('div', { class: 'stage-note' }, (S.pos === 'ini' ? 'Palabras que empiezan con' : 'Palabras que terminan con') + ' «' + S.syl.s + '»'),
-        timer.ring,
+    timer.ring.classList.add('compact');
+    return h('div', { class: 'grid stage-screen play-layout' },
+      h('div', { class: 'stage hero-stage' },
+        h('div', { class: 'stage-top' },
+          h('div', { class: 'stage-top-info' },
+            h('div', { class: 'stage-label' }, 'Turno ' + (S.current + 1) + ' de 2'),
+            h('div', { class: 'stage-who' }, '✍️ Escribe ' + MCR.store.nameOf(id))
+          ),
+          timer.ring
+        ),
+        h('div', { class: 'stage-sub' }, S.pos === 'ini' ? 'Palabras que EMPIEZAN con' : 'Palabras que TERMINAN con'),
+        h('div', { class: 'stage-word hero' }, (S.pos === 'ini' ? '' : '…') + S.syl.s + (S.pos === 'ini' ? '…' : '')),
         h('div', { class: 'stage-note' }, status)
       ),
       h('div', { class: 'action-bar' },
@@ -534,7 +539,7 @@ MCR.screens = MCR.screens || {};
         ))
       ),
       h('div', { class: 'action-bar' },
-        h('button', { class: 'btn btn-ghost', onclick: () => { MCR.ui.endGame('game:almohadazo'); reset(); MCR.go('home'); } }, 'Terminar juego'),
+        h('button', { class: 'btn btn-ghost', onclick: () => { MCR.ui.endGame('game:almohadazo'); reset(); MCR.go('catalog'); } }, 'Terminar · siguiente juego →'),
         h('button', {
           class: 'btn btn-gold btn-xl',
           onclick: () => {

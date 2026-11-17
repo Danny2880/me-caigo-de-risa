@@ -173,7 +173,8 @@ MCR.screens = MCR.screens || {};
       return h('div', { class: 'grid' },
         h('div', { class: 'stage' },
           h('div', { class: 'stage-label' }, 'Categoría'),
-          h('div', { class: 'stage-word sm' }, cat.name),
+          h('div', { class: 'stage-word mid' }, cat.name),
+          h('div', { class: 'stage-note' }, 'En turnos y sin pausas: quien repita, se trabe o tarde, sale.'),
           h('button', { class: 'btn btn-quiet mini hide-in-visual', onclick: () => { S.category = null; MCR.go('game:caricaturas'); } }, 'Cambiar categoría')
         ),
         h('div', { class: 'panel hide-in-visual' },
@@ -310,7 +311,7 @@ MCR.screens = MCR.screens || {};
     return h('div', { class: 'grid' },
       h('div', { class: 'stage' },
         h('div', { class: 'stage-label' }, 'Categoría final'),
-        h('div', { class: 'stage-word sm' }, cat.name)
+        h('div', { class: 'stage-word mid' }, cat.name)
       ),
       h('div', { class: 'panel hide-in-visual' },
         h('div', { class: 'panel-title' }, '¿Quién ganó?'),

@@ -3212,3 +3212,123 @@ details > summary { color: var(--ink); }
   .sud-track li { flex-direction: column; gap: 4px; padding: 6px 4px; font-size: 11px; text-align: center; }
   .sud-track li span:last-child { white-space: normal; line-height: 1.15; }
 }
+
+/* =========================================================
+   v10 · Jerarquía de la pantalla de juego
+   1.º lo que se juega (palabra, letras, sílaba, categoría): enorme.
+   2.º la acción de quien conduce (botones de punto / correcta): grande.
+   3.º reloj compacto arriba a la derecha y marcadores discretos.
+   ========================================================= */
+.hero-stage { gap: 10px; padding-top: clamp(14px, 2.4vw, 24px); }
+.stage-top { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; text-align: left; }
+.stage-top-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.stage-top .stage-label { letter-spacing: .2em; }
+.stage-who { font-size: clamp(14px, 1.8vw, 17px); font-weight: 700; color: var(--ink-2); overflow-wrap: anywhere; }
+.stage-sub { font-size: clamp(13px, 1.6vw, 16px); font-weight: 800; letter-spacing: .08em; color: var(--muted); }
+.ring.compact { width: clamp(78px, 10vw, 116px); }
+.ring.compact .ring-num { font-size: clamp(22px, 3vw, 34px); }
+.ring.compact .ring-bg, .ring.compact .ring-fg { stroke-width: 12; }
+.stage-word.hero {
+  font-size: clamp(48px, min(11.5vw, 15vh), 150px);
+  line-height: .95;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  margin: clamp(6px, 2vh, 22px) 0;
+}
+.stage-word.mid { font-size: clamp(32px, 6.2vw, 76px); line-height: 1; overflow-wrap: anywhere; }
+.play-layout { gap: 14px; }
+.play-count { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; font-size: 15px; color: var(--muted); }
+.play-count strong { color: var(--ink); font-size: 18px; }
+
+/* ---- Sándwich: letras gigantes y botones de punto protagonistas ---- */
+.sw-letters { display: flex; align-items: center; justify-content: center; gap: clamp(10px, 4vw, 48px); margin: clamp(4px, 1.5vh, 16px) 0; }
+.sw-letter { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sw-char {
+  font-family: var(--display); font-weight: 900; line-height: .9; color: var(--ink);
+  font-size: clamp(84px, min(22vw, 24vh), 230px);
+  min-width: 1.1em; text-align: center;
+  padding: 0 .12em; border-radius: 22px; background: var(--surface-2); border: 2px solid var(--line);
+}
+.sw-cap { font-size: 12px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.sw-dots { font-size: clamp(36px, 6vw, 70px); color: var(--muted); font-weight: 800; }
+.sw-letters.veiled .sw-char { color: var(--muted); }
+.sw-points { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sw-point {
+  width: 100%; min-height: clamp(86px, 14vh, 128px);
+  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px;
+  border-width: 2px; white-space: normal; text-align: center;
+}
+.sw-point.team-0 { --bg-btn: var(--team-a-bg); --bg-btn-h: color-mix(in srgb, var(--team-a-bg) 75%, var(--team-a)); --fg-btn: var(--team-a-ink); --bd-btn: var(--team-a-line); }
+.sw-point.team-1 { --bg-btn: var(--team-b-bg); --bg-btn-h: color-mix(in srgb, var(--team-b-bg) 75%, var(--team-b)); --fg-btn: var(--team-b-ink); --bd-btn: var(--team-b-line); }
+.sw-point-main { font-size: clamp(22px, 3vw, 32px); font-weight: 900; }
+.sw-point-sub { font-size: 13.5px; font-weight: 600; opacity: .85; }
+.sw-mini-score { font-size: 13px; color: var(--muted); font-weight: 700; padding: 6px 10px; border: 1px dashed var(--line-2); border-radius: 10px; font-variant-numeric: tabular-nums; }
+.sw-final .score-side { padding: clamp(16px, 3vw, 28px) 14px; gap: 6px; display: flex; flex-direction: column; align-items: center; }
+.sw-final .score-n { font-size: clamp(64px, 12vw, 128px); }
+.sw-final .score-l { font-size: 13px; }
+.sw-members { margin-top: 6px; font-size: 13.5px; color: var(--ink-2); text-align: center; line-height: 1.45; }
+
+/* ---- Te la compro: botones de tamaño fijo y turno visible ---- */
+.tlc-turn { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 26px; border-radius: 18px; background: var(--gold-bg); border: 1px solid var(--gold-line); }
+.tlc-turn-l { font-size: 12.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-ink); }
+.tlc-turn-name { font-size: clamp(26px, 4.2vw, 42px); font-weight: 900; color: var(--ink); }
+.tlc-current { font-size: clamp(15px, 1.9vw, 19px); color: var(--ink-2); }
+.tlc-current.empty { color: var(--muted); }
+.tlc-out-name { color: var(--danger, #c81e33); }
+/* Ancho fijo: el texto («Sube a 12 palabras», nombres largos) nunca cambia el tamaño. */
+.game-foot .tlc-actions, .tlc-actions { display: flex; flex-wrap: nowrap; gap: 12px; align-items: stretch; justify-content: flex-end; --tlc-w: clamp(210px, 25vw, 290px); }
+.tlc-actions .game-back { margin-right: auto; }
+.tlc-btn {
+  flex: 0 0 var(--tlc-w, 260px); width: var(--tlc-w, 260px); height: 76px; min-height: 76px; padding: 8px 14px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 3px;
+  white-space: nowrap; overflow: hidden; text-align: center;
+}
+.tlc-btn-main { font-size: 18px; font-weight: 900; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.tlc-btn-sub { font-size: 12.5px; font-weight: 600; opacity: .8; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.tlc-bet { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); }
+.tlc-bet-l { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); max-width: 8ch; line-height: 1.15; }
+.tlc-bet-n { min-width: 2.2ch; text-align: center; font-size: 30px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--ink); }
+.tlc-bet .step-btn { width: 44px; height: 44px; font-size: 24px; }
+.tlc-verdict { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.tlc-verdict .tlc-btn { height: 92px; width: 100%; flex: none; }
+.tlc-table .table-order { list-style: none; margin: 10px 0 0; padding: 0; }
+.table-seat-n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--surface-2); color: var(--muted); }
+.table-seat.active .table-seat-n { background: var(--primary); color: #fff; }
+.table-seat.bidder { border-color: var(--gold-line); background: var(--gold-bg); }
+.table-seat-tag.bid { color: var(--gold-ink); }
+.tlc-out { margin-top: 8px; }
+
+@media (max-width: 720px) {
+  .game-foot .tlc-actions, .tlc-actions { flex-wrap: wrap; --tlc-w: calc(50% - 5px); gap: 10px; }
+  .tlc-actions .game-back { order: 0; flex: 0 0 auto; margin: 0; }
+  .tlc-bet { order: 1; flex: 1 1 0; min-width: 0; justify-content: center; }
+  .tlc-actions .tlc-buy { order: 2; }
+  .tlc-actions .tlc-btn.btn-gold { order: 3; }
+  .tlc-bet-l { display: none; }
+  .tlc-bet-l { max-width: none; }
+  .tlc-btn { height: 70px; min-height: 70px; }
+  .tlc-btn-main { font-size: 16px; }
+}
+@media (max-width: 560px) {
+  .stage-word.hero { font-size: clamp(40px, 13vw, 64px); }
+  .sw-char { font-size: clamp(84px, 30vw, 140px); }
+  .sw-points { gap: 10px; }
+  .sw-point { min-height: 92px; }
+  .sw-point-main { font-size: 21px; }
+  .sw-point-sub { font-size: 12px; }
+  .sw-final { grid-template-columns: 1fr; }
+  .tlc-verdict { grid-template-columns: 1fr; }
+}
+.game.visual .stage-word.hero { font-size: clamp(60px, 13vw, 170px); }
+/* Te la compro: mismo ancho para «Te la compro» y «Sube a…» en cualquier pantalla. */
+.game-foot .tlc-actions > .tlc-btn { flex: 0 0 var(--tlc-w, 260px); width: var(--tlc-w, 260px); max-width: none; }
+@media (max-width: 720px) {
+  .game-foot .tlc-actions > .tlc-bet { min-width: calc(100% - 120px); }
+  .game-foot .tlc-actions > .tlc-btn { flex: 0 0 calc(50% - 5px); width: calc(50% - 5px); }
+}
+.stage-word.hero.long { font-size: clamp(40px, min(7.6vw, 12vh), 112px); overflow-wrap: normal; word-break: normal; }
+.play-layout .duel-actions .btn { min-height: clamp(70px, 11vh, 96px); font-size: clamp(19px, 2.4vw, 24px); font-weight: 900; }
+@media (max-width: 560px) {
+  .stage-word.hero { font-size: clamp(44px, 15vw, 76px); }
+  .stage-word.hero.long { font-size: clamp(28px, 9vw, 42px); }
+}

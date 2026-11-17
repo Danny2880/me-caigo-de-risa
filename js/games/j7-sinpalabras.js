@@ -472,26 +472,24 @@ MCR.screens = MCR.screens || {};
       MCR.ui.toast('Se quitó «' + word + '»');
     };
 
-    return h('div', { class: 'grid stage-screen' },
-      h('div', { class: 'row spread hide-in-visual' },
-        h('div', { class: 'turn-badge' }, 'Pareja ' + (S.current + 1) + ' de ' + S.pairs.length),
-        h('div', { class: 'row' },
-          h('span', { class: 'badge' }, '🎧 ' + MCR.store.nameOf(pair.guesser)),
-          h('span', { class: 'badge' }, '🗣️ ' + MCR.store.nameOf(pair.clue))
-        )
+    timer.ring.classList.add('compact');
+    return h('div', { class: 'grid stage-screen play-layout' },
+      h('div', { class: 'stage hero-stage' },
+        h('div', { class: 'stage-top' },
+          h('div', { class: 'stage-top-info' },
+            h('div', { class: 'stage-label' }, 'Pareja ' + (S.current + 1) + ' de ' + S.pairs.length),
+            h('div', { class: 'stage-who' }, '🗣️ ' + MCR.store.nameOf(pair.clue) + ' dice · 🎧 ' + MCR.store.nameOf(pair.guesser) + ' adivina')
+          ),
+          timer.ring
+        ),
+        h('div', { class: 'stage-word hero' + (t.status === 'idle' ? ' veiled' : '') + (String(S.word || '').length > 9 ? ' long' : '') }, t.status === 'idle' ? '• • •' : S.word),
+        h('div', { class: 'stage-note' }, t.status === 'idle'
+          ? 'La palabra aparece al iniciar el reloj. Solo ' + MCR.store.nameOf(pair.clue) + ' debe ver la pantalla.'
+          : 'Dila solo con los labios, sin voz.')
       ),
-      h('div', { class: 'stage' },
-        h('div', { class: 'stage-label' }, t.status === 'idle' ? 'La palabra aparece al iniciar' : 'Dila solo con los labios'),
-        h('div', { class: 'stage-word' + (t.status === 'idle' ? ' veiled' : '') }, t.status === 'idle' ? '• • •' : S.word),
-        h('div', { class: 'stage-note' }, 'Solo ' + MCR.store.nameOf(pair.clue) + ' debe ver esta pantalla.')
-      ),
-      h('div', { class: 'lip-score' },
-        timer.ring,
-        h('div', { class: 'center' },
-          h('div', { class: 'stat-n' }, String(S.correct)),
-          h('div', { class: 'stat-l' }, S.correct === 1 ? 'correcta' : 'correctas'),
-          h('div', { class: 'badge', style: { marginTop: '8px' } }, S.passed + (S.passed === 1 ? ' pasada' : ' pasadas'))
-        )
+      h('div', { class: 'play-count', 'aria-live': 'polite' },
+        h('span', null, '✓ ', h('strong', null, String(S.correct)), S.correct === 1 ? ' correcta' : ' correctas'),
+        h('span', null, '⏭ ', h('strong', null, String(S.passed)), S.passed === 1 ? ' pasada' : ' pasadas')
       ),
       h('div', { class: 'duel-actions' },
         h('button', { class: 'btn btn-ghost btn-xl', disabled: !live, onclick: pass }, '⏭ Paso'),
