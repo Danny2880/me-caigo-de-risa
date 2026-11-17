@@ -348,6 +348,7 @@ MCR.screens = MCR.screens || {};
     const list = S.pos === 'ini' ? content.syllablesIni : content.syllablesFin;
 
     if (!S.syl) return h('div', {});
+    const loseSel = S.pair.includes(S.sel) ? S.sel : null;
 
     return h('div', { class: 'grid' },
       h('div', { class: 'stage' },
@@ -366,16 +367,14 @@ MCR.screens = MCR.screens || {};
       ),
       h('div', { class: 'panel' },
         h('div', { class: 'panel-title' }, '¿Quién perdió la muerte súbita?'),
-        h('div', { class: 'opt-grid' }, S.pair.map((id) =>
-          h('button', {
-            class: 'opt opt-big',
-            onclick: () => {
-              const loser = id;
-              const winner = S.pair.find((x) => x !== loser);
-              closeRound(winner);
-            }
-          }, MCR.store.nameOf(id))
-        ))
+        MCR.ui.choiceGrid({ ids: S.pair, value: loseSel, key: 'sudden', onSelect: (id) => { S.sel = id; MCR.go('game:almohadazo'); } })
+      ),
+      h('div', { class: 'action-bar' },
+        h('div', { class: 'action-bar-info' }, loseSel ? 'Gana ' + MCR.store.nameOf(S.pair.find((x) => x !== loseSel)) : 'Toca a quien perdió'),
+        MCR.ui.confirmBtn(loseSel, (n) => 'Confirmar · perdió ' + n, (id) => {
+          S.sel = null;
+          closeRound(S.pair.find((x) => x !== id));
+        })
       )
     );
   }

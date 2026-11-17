@@ -188,3 +188,7 @@ sigue descansando. En Teléfono no hay «Todos / Ninguno»: si alguien descansa 
 - **🔄 Cambio** (arriba a la derecha durante la partida) en Teléfono, Almohadazo, Cascarón, Te la compro, Sándwich y Sin palabras: se elige quién sale y quién entra (buscador; se puede escribir un nombre nuevo). Quien entra toma el lugar exacto (equipo, turno, pareja, fila). Lo ya jugado (historial, resultados, eliminados, puntos) no cambia de dueño. Implementado en `MCR.ui.swapPlayer`.
 - **Caricaturas**: el botón del pie se llama «🔄 Cambio →» y usa su propio flujo de eliminado + reemplazo (máximo 3).
 - **Teléfono**: «Mostrar película» abre una pantalla completa con el título enorme (`MCR.ui.reveal`); se cierra tocando en cualquier lugar, con la × o con Esc. Al tocar «🔄 Cambio · arranca 10 s» o «Terminó antes · cambio» la siguiente mímica empieza sola.
+
+## 11. Marcar y confirmar (v8)
+
+Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el botón principal del pie confirma («Confirmar · sale X →», «✓ Confirmar · entra X», «🏆 Confirmar · ganó X»). Tocar de nuevo desmarca. Aplica a: Caricaturas (quién sale, quién entra, ganador de la final), Almohadazo (muerte súbita), Te la compro (quién compró y a quién) y la ventana 🔄 Cambio de todos los juegos (quién sale → Siguiente; quién entra → Confirmar). Helpers: `MCR.ui.choiceGrid` y `MCR.ui.confirmBtn`. Los botones con resultado explícito («Gana X» en Cascarón, «Sí lo logró / No lo logró» en Te la compro) siguen siendo directos porque ya son la confirmación.

@@ -1,6 +1,6 @@
 window.MCR = window.MCR || {};
 MCR.screens = MCR.screens || {};
-MCR.BUILD = '2026-11-16 · v7 · cambio y película';
+MCR.BUILD = '2026-11-16 · v8 · marcar y confirmar';
 console.info('Me caigo de risa · build', MCR.BUILD);
 
 /* =========================================================

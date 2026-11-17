@@ -257,39 +257,44 @@ MCR.screens = MCR.screens || {};
 
   function viewResolver() {
     const alive = alivePlayers();
+    const sel = alive.includes(S.sel) ? S.sel : null;
 
     if (!S.buyer) {
       return h('div', { class: 'grid' },
         h('div', { class: 'panel' },
           h('div', { class: 'eyebrow' }, 'Cerrar la ronda'),
           h('h2', { style: { fontSize: '24px' } }, '¿Quién dijo «te la compro»?'),
-          h('div', { class: 'opt-grid mt' }, alive.map((id) =>
-            h('button', {
-              class: 'opt opt-big',
-              onclick: () => { S.buyer = id; S.challenged = previousBidder(id); MCR.go('game:telacompro'); }
-            }, MCR.store.nameOf(id))
-          ))
+          h('div', { class: 'mt' }, MCR.ui.choiceGrid({ ids: alive, value: sel, key: 'buyer', onSelect: (id) => { S.sel = id; MCR.go('game:telacompro'); } }))
         ),
         h('div', { class: 'btn-row' },
-          h('button', { class: 'btn btn-ghost', onclick: () => { S.step = 'ronda'; MCR.go('game:telacompro'); } }, '← Atrás')
+          h('button', { class: 'btn btn-ghost', onclick: () => { S.sel = null; S.step = 'ronda'; MCR.go('game:telacompro'); } }, '← Atrás')
+        ),
+        h('div', { class: 'action-bar' },
+          h('div', { class: 'action-bar-info' }, sel ? 'Se confirma al tocar el botón' : 'Toca a quien compró'),
+          MCR.ui.confirmBtn(sel, (n) => 'Confirmar · compró ' + n + ' →', (id) => {
+            S.sel = null; S.buyer = id; S.challenged = previousBidder(id); MCR.go('game:telacompro');
+          })
         )
       );
     }
 
     if (!S.challenged) {
+      const others = alive.filter((id) => id !== S.buyer);
+      const chalSel = others.includes(S.sel) ? S.sel : null;
       return h('div', { class: 'grid' },
         h('div', { class: 'panel' },
           h('div', { class: 'eyebrow' }, 'Comprador: ' + MCR.store.nameOf(S.buyer)),
           h('h2', { style: { fontSize: '24px' } }, '¿A quién se la compró?'),
-          h('div', { class: 'opt-grid mt' }, alive.filter((id) => id !== S.buyer).map((id) =>
-            h('button', {
-              class: 'opt opt-big',
-              onclick: () => { S.challenged = id; MCR.go('game:telacompro'); }
-            }, MCR.store.nameOf(id))
-          ))
+          h('div', { class: 'mt' }, MCR.ui.choiceGrid({ ids: others, value: chalSel, key: 'chal', onSelect: (id) => { S.sel = id; MCR.go('game:telacompro'); } }))
         ),
         h('div', { class: 'btn-row' },
-          h('button', { class: 'btn btn-ghost', onclick: () => { S.buyer = null; MCR.go('game:telacompro'); } }, '← Atrás')
+          h('button', { class: 'btn btn-ghost', onclick: () => { S.sel = null; S.buyer = null; MCR.go('game:telacompro'); } }, '← Atrás')
+        ),
+        h('div', { class: 'action-bar' },
+          h('div', { class: 'action-bar-info' }, chalSel ? 'Se confirma al tocar el botón' : 'Toca a quien le compraron'),
+          MCR.ui.confirmBtn(chalSel, (n) => 'Confirmar · le compró a ' + n + ' →', (id) => {
+            S.sel = null; S.challenged = id; MCR.go('game:telacompro');
+          })
         )
       );
     }

@@ -213,6 +213,35 @@ MCR.ui = (function () {
     setTimeout(() => scrim.querySelector('.reveal-x').focus(), 0);
   }
 
+  /* ---------- elegir a una persona y confirmar ----------
+     Tocar solo marca (✓). Nada avanza hasta tocar el botón de confirmar que cada
+     pantalla pone en el pie: así un toque accidental nunca elimina ni cambia a nadie. */
+  function choiceGrid(opts) {
+    return h('div', { class: 'opt-grid choice-grid', role: 'radiogroup', 'aria-label': opts.label || 'Elige a una persona' },
+      opts.ids.map((id) => {
+        const on = opts.value === id;
+        return h('button', {
+          class: 'opt opt-big' + (on ? ' sel' : ''),
+          role: 'radio',
+          'aria-checked': String(on),
+          'data-focus-key': 'choice-' + (opts.key || '') + id,
+          onclick: () => opts.onSelect(on && opts.toggle !== false ? null : id)
+        }, on ? '✓ ' + MCR.store.nameOf(id) : MCR.store.nameOf(id));
+      })
+    );
+  }
+
+  /* Botón principal de confirmación: deshabilitado hasta que haya alguien marcado. */
+  function confirmBtn(id, label, onConfirm, opts) {
+    opts = opts || {};
+    return h('button', {
+      class: 'btn ' + (opts.kind || 'btn-gold') + ' btn-xl confirm-btn',
+      disabled: !id,
+      'data-focus-key': 'confirm-' + (opts.key || ''),
+      onclick: () => { if (id) onConfirm(id); }
+    }, id ? label(MCR.store.nameOf(id)) : (opts.empty || 'Elige a alguien'));
+  }
+
   /* ---------- cambio de jugador ----------
      «🔄 Cambio»: alguien sale a media partida y otra persona toma su lugar exacto
      (equipo, turno, pareja, fila). Se reemplaza el id en el estado del juego salvo en
@@ -254,6 +283,9 @@ MCR.ui = (function () {
     const layer = document.getElementById('layer');
     layer.classList.add('on');
     let outId = ids.length === 1 ? ids[0] : null;
+    let outConfirmed = ids.length === 1;
+    let inId = null;
+    let extra = [];   // personas añadidas desde el buscador en este cambio
     const close = () => {
       document.removeEventListener('keydown', onKey);
       scrim.remove();
@@ -272,18 +304,26 @@ MCR.ui = (function () {
     const paint = () => {
       clear(box);
       box.append(h('button', { class: 'icon-btn quiet modal-x', 'aria-label': 'Cerrar', onclick: close }, '×'));
-      if (!outId) {
+      if (!outConfirmed) {
         box.append(
           h('h3', null, '🔄 Cambio · ¿quién sale?'),
-          h('p', null, 'Quien entre toma su lugar exacto: equipo, turno y papel. Lo que ya se jugó no cambia.'),
-          h('div', { class: 'swap-out' }, ids.map((id) =>
-            h('button', { class: 'btn btn-ghost swap-chip', onclick: () => { outId = id; paint(); } }, MCR.store.nameOf(id))
-          ))
+          h('p', null, 'Toca a quien sale y luego «Siguiente». Quien entre toma su lugar exacto: equipo, turno y papel. Lo que ya se jugó no cambia.'),
+          h('div', { class: 'swap-out', role: 'radiogroup' }, ids.map((id) =>
+            h('button', {
+              class: 'btn btn-ghost swap-chip' + (outId === id ? ' sel' : ''),
+              role: 'radio', 'aria-checked': String(outId === id),
+              onclick: () => { outId = outId === id ? null : id; paint(); }
+            }, (outId === id ? '✓ ' : '') + MCR.store.nameOf(id))
+          )),
+          h('div', { class: 'btn-row swap-actions' },
+            h('button', { class: 'btn btn-ghost', onclick: close }, 'Cancelar'),
+            confirmBtn(outId, (n) => 'Siguiente · sale ' + n + ' →', () => { outConfirmed = true; inId = null; paint(); })
+          )
         );
         return;
       }
       const busy = idsIn(opts.S, null, SWAP_KEEP.concat('picks')); // quien descansa sí puede entrar
-      const pool = MCR.store.players().map((p) => p.id).filter((id) => !busy.has(id));
+      const pool = MCR.store.players().map((p) => p.id).filter((id) => !busy.has(id) || extra.includes(id));
       box.append(
         h('h3', null, '¿Quién entra por ' + MCR.store.nameOf(outId) + '?'),
         peoplePicker({
@@ -291,17 +331,21 @@ MCR.ui = (function () {
           key: 'swap-' + opts.route,
           gameId: opts.gameId,
           ids: pool,
+          selected: inId ? [inId] : [],
           title: 'Disponibles',
-          onPick: apply,
+          onPick: (id) => { inId = inId === id ? null : id; paint(); },
           onAdd: (p) => {
-            if (busy.has(p.id)) { toast(p.name + ' ya está en esta partida'); return; }
-            apply(p.id);
+            if (busy.has(p.id) && !extra.includes(p.id)) { toast(p.name + ' ya está en esta partida'); return; }
+            extra.push(p.id); inId = p.id; paint();
           },
           emptyText: 'No hay nadie libre. Escribe un nombre si llegó alguien.'
         }),
-        ids.length > 1 ? h('div', { class: 'btn-row' },
-          h('button', { class: 'btn btn-quiet', onclick: () => { outId = null; paint(); } }, '← Elegir a otra persona')
-        ) : null
+        h('div', { class: 'btn-row swap-actions' },
+          ids.length > 1
+            ? h('button', { class: 'btn btn-ghost', onclick: () => { outConfirmed = false; inId = null; paint(); } }, '← Atrás')
+            : h('button', { class: 'btn btn-ghost', onclick: close }, 'Cancelar'),
+          confirmBtn(inId, (n) => '✓ Confirmar · entra ' + n, apply)
+        )
       );
     };
     paint();
@@ -1039,13 +1083,13 @@ MCR.ui = (function () {
       const row = h('button', {
         class: 'pp-row' + (on ? ' on' : '') + (due ? ' due' : '') + (blocked ? ' blocked' : '') + (mode === 'single' ? ' single' : ''),
         role: 'listitem',
-        'aria-pressed': mode === 'single' ? null : String(on),
+        'aria-pressed': String(on),
         'data-focus-key': 'pp-' + key + '-' + id,
         'data-name': normText(p.name),
         onclick: () => choose(id)
       },
         mode === 'single'
-          ? h('span', { class: 'pp-avatar' }, initials(p.name))
+          ? h('span', { class: 'pp-avatar' }, on ? '✓' : initials(p.name))
           : h('span', { class: 'pp-check', 'aria-hidden': 'true' }, on ? '✓' : ''),
         h('span', { class: 'pp-txt' },
           h('span', { class: 'pp-name' }, p.name),
@@ -1363,7 +1407,7 @@ MCR.ui = (function () {
   }
 
   return {
-    h, clear, fmt, durationText, durationPicker, initials, avatar, toast, dialog, confirm, reveal, swapPlayer, ring, countdown,
+    h, clear, fmt, durationText, durationPicker, initials, avatar, toast, dialog, confirm, reveal, swapPlayer, choiceGrid, confirmBtn, ring, countdown,
     newTimer, timerView, endGame, recordWithUndo, finishBar,
     shell, gameNavigation, playerGrid, playerMeta, peoplePicker, fairOrder, searchIcon, picker, playerList, quickAdd,
     columnOrder, setupHead, stepBar, gameFlow, gameIntro, gameRulesPage, ruleGuide, teamRow, teamBoard, teamBalance

@@ -209,25 +209,27 @@ MCR.screens = MCR.screens || {};
   /* ---------- eliminar ---------- */
 
   function viewEliminar() {
+    const sel = S.current.includes(S.sel) ? S.sel : null;
+    const out = (id) => {
+      S.sel = null;
+      S.eliminated.push(id);
+      S.current = S.current.filter((x) => x !== id);
+      S.category = null;
+      S.step = (S.replaces < MAX_REPLACES && replacementPool().length) ? 'reemplazo' : 'final';
+      MCR.go('game:caricaturas');
+    };
     return h('div', { class: 'grid' },
       h('div', { class: 'panel center' },
         h('div', { class: 'eyebrow' }, 'Cambio · ¿quién sale?'),
-        h('h2', { style: { fontSize: 'clamp(22px,3.4vw,32px)', marginBottom: '18px' } }, 'Toca al eliminado'),
-        h('div', { class: 'opt-grid' }, S.current.map((id) =>
-          h('button', {
-            class: 'opt opt-big',
-            onclick: () => {
-              S.eliminated.push(id);
-              S.current = S.current.filter((x) => x !== id);
-              S.category = null;
-              S.step = (S.replaces < MAX_REPLACES && replacementPool().length) ? 'reemplazo' : 'final';
-              MCR.go('game:caricaturas');
-            }
-          }, MCR.store.nameOf(id))
-        ))
+        h('h2', { style: { fontSize: 'clamp(22px,3.4vw,32px)', marginBottom: '18px' } }, 'Toca a quien quedó fuera'),
+        MCR.ui.choiceGrid({ ids: S.current, value: sel, key: 'elim', onSelect: (id) => { S.sel = id; MCR.go('game:caricaturas'); } })
       ),
       h('div', { class: 'btn-row' },
-        h('button', { class: 'btn btn-ghost', onclick: () => { S.step = 'ronda'; MCR.go('game:caricaturas'); } }, '← Atrás')
+        h('button', { class: 'btn btn-ghost', onclick: () => { S.sel = null; S.step = 'ronda'; MCR.go('game:caricaturas'); } }, '← Atrás')
+      ),
+      h('div', { class: 'action-bar' },
+        h('div', { class: 'action-bar-info' }, sel ? 'Se confirma al tocar el botón' : 'Toca un nombre para marcarlo'),
+        MCR.ui.confirmBtn(sel, (n) => 'Confirmar · sale ' + n + ' →', out)
       )
     );
   }
@@ -242,7 +244,9 @@ MCR.screens = MCR.screens || {};
 
   function viewReemplazo() {
     const ordered = replacementPool();
+    const sel = ordered.includes(S.sel) ? S.sel : null;
     const enter = (id) => {
+      S.sel = null;
       S.current.push(id);
       S.replaces += 1;
       S.step = 'ronda';
@@ -253,7 +257,7 @@ MCR.screens = MCR.screens || {};
       MCR.ui.setupHead({
         step: 'Reemplazo ' + (S.replaces + 1) + ' de ' + MAX_REPLACES,
         title: '¿Quién entra?',
-        sub: 'Arriba aparece quien menos ha jugado en la fiesta. Toca a cualquiera para que entre.'
+        sub: 'Arriba aparece quien menos ha jugado en la fiesta. Toca a alguien para marcarlo y confirma abajo.'
       }),
       MCR.ui.peoplePicker({
         mode: 'single',
@@ -261,19 +265,22 @@ MCR.screens = MCR.screens || {};
         title: 'Disponibles',
         gameId: 'caricaturas',
         ids: ordered,
-        onPick: enter,
+        selected: sel ? [sel] : [],
+        onPick: (id) => { S.sel = sel === id ? null : id; MCR.go('game:caricaturas'); },
         emptyText: 'No queda nadie disponible para reemplazar. Escribe un nombre si llegó alguien.',
         onAdd: (p) => {
           if (S.current.includes(p.id) || S.eliminated.includes(p.id)) { MCR.ui.toast(p.name + ' ya jugó esta partida'); MCR.go('game:caricaturas'); return; }
-          enter(p.id);
+          S.sel = p.id;
+          MCR.go('game:caricaturas');
         }
       }),
       h('div', { class: 'action-bar' },
         h('div', { class: 'action-bar-info' }, 'Quedan ' + S.current.length + ' en juego'),
         S.current.length >= 2 ? h('button', {
           class: 'btn btn-ghost',
-          onclick: () => { S.step = 'final'; MCR.go('game:caricaturas'); }
-        }, 'Ir a la final sin reemplazo') : null
+          onclick: () => { S.sel = null; S.step = 'final'; MCR.go('game:caricaturas'); }
+        }, 'Ir a la final sin reemplazo') : null,
+        MCR.ui.confirmBtn(sel, (n) => '✓ Confirmar · entra ' + n, enter)
       )
     );
   }
@@ -282,6 +289,7 @@ MCR.screens = MCR.screens || {};
 
   function viewFinal() {
     const cat = S.category;
+    const winSel = S.current.includes(S.sel) ? S.sel : null;
 
     if (!cat) {
       return h('div', { class: 'grid' },
@@ -306,20 +314,20 @@ MCR.screens = MCR.screens || {};
       ),
       h('div', { class: 'panel hide-in-visual' },
         h('div', { class: 'panel-title' }, '¿Quién ganó?'),
-        h('div', { class: 'opt-grid' }, S.current.map((id) =>
-          h('button', {
-            class: 'opt opt-big',
-            onclick: () => {
-              S.winner = id;
-              S.loser = S.current.find((x) => x !== id);
-              S.step = 'fin';
-              MCR.go('game:caricaturas');
-            }
-          }, MCR.store.nameOf(id))
-        )),
+        MCR.ui.choiceGrid({ ids: S.current, value: winSel, key: 'win', onSelect: (id) => { S.sel = id; MCR.go('game:caricaturas'); } }),
         h('div', { class: 'btn-row mt' },
-          h('button', { class: 'btn btn-quiet mini', onclick: () => { S.category = null; MCR.go('game:caricaturas'); } }, 'Cambiar categoría')
+          h('button', { class: 'btn btn-quiet mini', onclick: () => { S.sel = null; S.category = null; MCR.go('game:caricaturas'); } }, 'Cambiar categoría')
         )
+      ),
+      h('div', { class: 'action-bar' },
+        h('div', { class: 'action-bar-info' }, winSel ? 'Se confirma al tocar el botón' : 'Toca a quien ganó'),
+        MCR.ui.confirmBtn(winSel, (n) => '🏆 Confirmar · ganó ' + n, (id) => {
+          S.sel = null;
+          S.winner = id;
+          S.loser = S.current.find((x) => x !== id);
+          S.step = 'fin';
+          MCR.go('game:caricaturas');
+        })
       )
     );
   }
