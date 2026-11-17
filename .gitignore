@@ -1,0 +1,18 @@
+# Sistema
+.DS_Store
+._*
+Thumbs.db
+
+# Respaldos y pruebas locales (no se publican)
+.build/
+.ref/
+
+# Dependencias y secretos
+node_modules/
+.env
+.env.*
+*.pem
+*.key
+
+# Netlify local
+.netlify/

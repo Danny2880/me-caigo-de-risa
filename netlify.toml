@@ -1,0 +1,17 @@
+# Sitio estático: no hay paso de compilación, se publica la carpeta tal cual.
+[build]
+  publish = "."
+  command = ""
+
+# Los archivos JS/CSS llevan ?v=AAAAMMDD en index.html: el HTML no se cachea
+# para que la tablet siempre reciba la versión nueva.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
