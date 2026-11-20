@@ -246,3 +246,11 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 - **Pares de letras**: catálogo de 135 pares fáciles; cada uno trae hasta 5 ejemplos (`ex`). Se quitaron los difíciles (X, Ñ, K, Q–R…). En la partida, «👀 Ejemplos» los muestra solo a quien conduce (se ocultan en modo público y al cambiar de par). En el gestor, los pares tienen un campo «Ejemplos».
 - **Migración `contentV12`** (store.js): suma categorías y palabras sin borrar lo personalizado; reemplaza los pares del catálogo (id `lp…`) y conserva los añadidos a mano.
 - **Sonidos** (solo donde se necesitan): Caricaturas tiene un botón «✕ ¡Error!» en la ronda y en la final; en Te la compro el veredicto («Sí / No lo logró») y en Teléfono la respuesta final («Sí / No adivinó») suenan solos. Error = `sounds/error.mp3`; correcto = campanita generada con Web Audio (`MCR.ui.sfx`).
+
+## 17. Reglas del conductor, empate en Almohadazo y Formar equipos (v13)
+
+- Las reglas de los 7 juegos son el texto que dicta quien conduce (sin «Objetivo»): pasos + «Cómo se gana» con el castigo (toques, almohadazo, cascarón, plancha/tiburones).
+- **Almohadazo · empate**: la opción principal es «🤝 Empate · almohadazo a los dos» (se registra sin ganador). «⚡ Muerte súbita» queda como alternativa.
+- **Sándwich**: duración por defecto 1 min 30 s.
+- **Formar equipos** (`js/games/j8-equipos.js`, ruta `game:equipos`): tarjeta aparte en el catálogo. Elige 2 o 3 equipos y quiénes participan; mezcla con `makeTeams` (diferencia máx. 1). No registra partidas.
+- `index.html` usa `?v=` en cada archivo: **súbelo en cada cambio** para que tabletas y Netlify no usen la versión vieja guardada.

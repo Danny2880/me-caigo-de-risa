@@ -83,7 +83,7 @@ MCR.screens = MCR.screens || {};
       kicker: 'Juego 03',
       title: 'Almohadazo',
       summary: 'Duelo en el pizarrón: con el reloj corriendo, escribe todas las palabras que puedas que empiecen o terminen con una sílaba.',
-      details: ['1 contra 1', 'Mismo tiempo para ambos', 'Empate: muerte súbita'],
+      details: ['1 contra 1', '1 minuto cada quien', 'Empate: almohadazo a los dos'],
       onContinue: () => { S.step = 'rules'; MCR.go('game:almohadazo'); }
     });
   }
@@ -92,18 +92,18 @@ MCR.screens = MCR.screens || {};
     return MCR.ui.gameRulesPage({
       headerSub: 'Léelo en voz alta tal cual.',
       title: 'Almohadazo',
-      goal: 'Escribir más palabras que tu rival.',
       steps: [
-        'Pasan dos. A cada quien le doy una sílaba y le digo si las palabras empiezan o terminan con ella.',
-        'Cuando arranque el reloj, escribe en el pizarrón todas las que se te ocurran.',
-        'Los dos tienen el mismo tiempo. Al final contamos.'
+        'Pasarán dos personas a competir.',
+        'Cada una tendrá un minuto para escribir palabras que empiecen o terminen con una sílaba que yo les diré.',
+        'Al final del tiempo contaremos cuántas palabras logró escribir. Su adversario hará lo mismo.'
       ],
-      win: 'Gana quien tenga más palabras bien escritas. Si empatan, muerte súbita: las dicen en voz alta por turnos y pierde el primero que falle.',
-      facts: [['Duelo', '1 contra 1'], ['Tiempo', 'El mismo para ambos'], ['Empate', 'Muerte súbita']],
+      win: 'Quien escriba menos palabras pierde y, como castigo, recibirá un almohadazo. Si empatan, ¡los dos recibirán el almohadazo!',
+      facts: [['Duelo', '1 contra 1'], ['Tiempo', '1 minuto cada quien'], ['Empate', 'Almohadazo a los dos']],
       special: [
         'No cuenta una palabra repetida, mal escrita o que no cumpla la sílaba.',
         '«Pausar» detiene el reloj si algo interrumpe; «Reiniciar reloj» repite el turno completo.',
         'Si alguien ya no tiene más palabras, toca «Terminar turno».',
+        'Si prefieren desempatar en lugar del almohadazo doble, en la pantalla de empate está «⚡ Muerte súbita».',
         'Cada duelo se registra al terminar; después pueden jugar otro con dos personas nuevas.'
       ],
       onBack: () => { S.step = 'intro'; MCR.go('game:almohadazo'); },
@@ -323,15 +323,16 @@ MCR.screens = MCR.screens || {};
           h('div', { class: 'eyebrow' }, 'Empate'),
           h('h2', { style: { fontSize: 'clamp(26px,4vw,42px)' } }, a + ' — ' + b),
           h('p', { class: 'stage-note', style: { margin: '10px auto 0' } },
-            'Muerte súbita: ahora contestan hablado, 1 × 1, sin escribir. Pierde el primero que se equivoque, repita o se quede sin palabras.')
+            '¡Los dos reciben almohadazo! Si prefieren desempatar, juega muerte súbita: contestan hablado, 1 × 1, y pierde el primero que se equivoque.')
         ),
         h('div', { class: 'action-bar' },
-          h('button', { class: 'btn btn-gold btn-xl', onclick: () => {
+          h('button', { class: 'btn btn-ghost', onclick: () => {
             S.sudden = true;
             S.sud = { phase: 'setup', pos: 'ini', syl: null, turn: 0, loser: null };
             S.step = 'sudden';
             MCR.go('game:almohadazo');
-          } }, '⚡ Ir a muerte súbita')
+          } }, '⚡ Muerte súbita'),
+          h('button', { class: 'btn btn-gold btn-xl', onclick: () => closeRound(null) }, '🤝 Empate · almohadazo a los dos →')
         )
       );
     }
@@ -484,12 +485,13 @@ MCR.screens = MCR.screens || {};
     return (config.pos === 'ini' ? 'empiezan con' : 'terminan con') + ' «' + syl + '»';
   }
 
+  /* winnerId null = empate: los dos reciben almohadazo y nadie suma victoria. */
   function closeRound(winnerId) {
-    const loserId = S.pair.find((x) => x !== winnerId);
+    const loserId = winnerId ? S.pair.find((x) => x !== winnerId) : null;
     MCR.ui.recordWithUndo({
       gameId: 'almohadazo',
       playerIds: MCR.ui.withSwapped(S, S.pair),
-      winners: [winnerId],
+      winners: winnerId ? [winnerId] : [],
       meta: {
         // configurations[i] corresponde a pair[i], igual que counts[i].
         pair: S.pair.slice(),
@@ -519,8 +521,8 @@ MCR.screens = MCR.screens || {};
   function viewEnd() {
     return h('div', { class: 'grid' },
       h('div', { class: 'stage' },
-        h('div', { class: 'stage-label' }, 'Ganador del duelo'),
-        h('div', { class: 'stage-word' }, MCR.store.nameOf(S.winner)),
+        h('div', { class: 'stage-label' }, S.winner ? 'Ganador del duelo' : 'Empate · almohadazo a los dos'),
+        h('div', { class: 'stage-word' }, S.winner ? MCR.store.nameOf(S.winner) : S.pair.map((id) => MCR.store.nameOf(id)).join(' y ')),
         h('div', { class: 'stage-note' }, S.sudden ? 'Por muerte súbita (' + S.counts[0] + ' — ' + S.counts[1] + ' en el pizarrón)' : S.counts[0] + ' — ' + S.counts[1])
       ),
       h('div', { class: 'panel' },
@@ -529,7 +531,7 @@ MCR.screens = MCR.screens || {};
           h('div', { class: 'trow' },
             h('div', { class: 'card-num' }, String(i + 1)),
             h('div', { class: 'grow' },
-              h('div', { class: 'trow-name' }, '🏆 ' + MCR.store.nameOf(r.winner) + (r.sudden ? ' · muerte súbita' : '')),
+              h('div', { class: 'trow-name' }, r.winner ? '🏆 ' + MCR.store.nameOf(r.winner) + (r.sudden ? ' · muerte súbita' : '') : '🤝 Empate · almohadazo a los dos'),
               h('div', { class: 'trow-meta' },
                 (r.pair || [r.winner, r.loser]).map((pid, index) =>
                   MCR.store.nameOf(pid) + ' ' + r.counts[index] + ' (' + configText(r.configs[index]) + ')'

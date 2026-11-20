@@ -77,13 +77,13 @@ MCR.screens = MCR.screens || {};
       headerSub: 'Léelo en voz alta tal cual.',
       title: 'Te la compro',
       origin: 'En el programa: «Te la compro», con el mismo nombre.',
-      goal: 'Ser el último que quede en la subasta.',
       steps: [
-        'Les digo una categoría. El primero dice cuántas cosas de esa categoría puede decir: «yo digo cuatro».',
-        'El siguiente sube la apuesta… o le dice «¡Te la compro!».',
-        'Si te la compran, tienes que decir todas las que prometiste, sin repetir.'
+        'Yo les voy a dar una categoría; por ejemplo, cosas que hay en una cocina. Y vamos a hacer una subasta.',
+        'Uno por uno me irá diciendo cuántos elementos de esa categoría cree que puede nombrar sin repetir y sin trabarse.',
+        'El que sigue tiene que subir la apuesta y decir un número más alto.',
+        'Cuando alguien diga «¡Te la compro!», el jugador anterior deberá probar que se sabe esa cantidad de elementos.'
       ],
-      win: 'Si cumples, sale quien te la compró. Si no, sales tú. Seguimos hasta que quede uno.',
+      win: 'Si no lo logra, se irá a caminar por la plancha. Pero si lo logra, a quien dijo «te la compro» lo arrojaremos a los tiburones.',
       facts: [['Jugadores', '3 a 6 (ideal 5)'], ['Por ronda', 'Sale 1 persona'], ['Rondas', 'Hasta que queda 1']],
       special: [
         'La primera persona de cada ronda no puede comprar: todavía no hay apuesta.',

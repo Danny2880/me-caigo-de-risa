@@ -78,14 +78,14 @@ MCR.screens = MCR.screens || {};
       headerSub: 'Léelo en voz alta tal cual.',
       title: 'Sin palabras',
       origin: 'Inspirado en «Ni hablar» del programa, donde una frase se pasa leyendo los labios con audífonos puestos.',
-      goal: 'Adivinar más palabras que las otras parejas.',
       steps: [
-        'Juegan por parejas. Uno se pone audífonos con la música a todo volumen.',
-        'El otro ve la palabra y se la dice solo moviendo la boca: sin voz y sin señas.',
-        'Si la adivinan, va otra. Si se atoran, pueden pasar.'
+        'Estarán frente a frente: uno de ustedes con audífonos y música a todo volumen.',
+        'Yo les mostraré una palabra y tendrán que decírsela al jugador que tiene los audífonos, que tendrá que adivinarla solo leyendo los labios.',
+        'Tienen un minuto para adivinar la mayor cantidad de palabras posible.',
+        'Luego pasará otro equipo, que hará exactamente lo mismo.'
       ],
-      win: 'Gana la pareja que adivine más palabras antes de que se acabe el tiempo.',
-      facts: [['Parejas', 'Una a la vez'], ['Tiempo', 'El mismo para todas'], ['Punto', '1 por palabra']],
+      win: 'El equipo perdedor recibirá un cascarón.',
+      facts: [['Parejas', 'Una a la vez'], ['Tiempo', '1 minuto por pareja'], ['Punto', '1 por palabra']],
       special: [
         'La persona con audífonos no debe ver la pantalla.',
         'Si marcaste «Correcta» por error, «Deshacer» la quita.',

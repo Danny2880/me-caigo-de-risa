@@ -239,6 +239,22 @@ console.info('Me caigo de risa · build', MCR.BUILD);
           h('button', { class: 'btn btn-gold btn-block', onclick: () => MCR.go('game:' + g.id) }, 'Abrir →')
         )
       )),
+      h('div', { class: 'grid grid-cards mt' },
+        h('div', { class: 'card game-card eq-card' },
+          h('div', { class: 'card-top' },
+            h('div', { class: 'card-num' }, '👥'),
+            h('div', { class: 'grow' },
+              h('div', { class: 'card-title' }, 'Formar equipos'),
+              h('div', { class: 'card-sub' }, 'Mezcla a los presentes en 2 o 3 equipos')
+            )
+          ),
+          h('div', { class: 'card-foot' },
+            h('span', { class: 'badge' }, 'Herramienta'),
+            h('span', { class: 'badge gold' }, '2 o 3 equipos')
+          ),
+          h('button', { class: 'btn btn-gold btn-block', onclick: () => MCR.go('game:equipos') }, 'Abrir →')
+        )
+      ),
       h('div', { class: 'row spread mt' },
         h('h2', { style: { fontSize: '22px' } }, 'Juegos propios'),
         h('button', { class: 'btn btn-ghost', onclick: () => MCR.go('custom:new') }, '+ Añadir juego')

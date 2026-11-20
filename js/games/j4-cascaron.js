@@ -62,13 +62,13 @@ MCR.screens = MCR.screens || {};
       headerSub: 'Léelo en voz alta tal cual.',
       title: 'Cascarón Piratas',
       origin: 'Inspirado en «¡Échale huevos!» del programa.',
-      goal: 'Salvarte antes de quedar al último.',
       steps: [
-        'Hagan dos filas, una frente a la otra.',
-        'Los primeros de cada fila juegan piedra, papel o tijera, pero gritando «¡Pi-ra-tas!».',
-        'Quien gana se salva y sale. Quien pierde se va al final de su fila y espera otra oportunidad.'
+        'Se formarán en dos filas.',
+        'Cada uno de ustedes se enfrentará en duelos rápidos de piedra, papel o tijera, mientras dicen la palabra «¡Piratas!».',
+        'El ganador le rompe en la cabeza al perdedor un huevo con un contenido sorpresa. ¡Huevo tocado, huevo jugado!',
+        'Así pasarán uno a uno: quien gane, se salva, y quien pierda, se vuelve a formar.'
       ],
-      win: 'El último que quede… ¡se lleva el cascarón!',
+      win: 'Seguimos hasta que tengamos a nuestro gran perdedor.',
       facts: [['Participan', 'Todo el grupo · mínimo 2'], ['Duelo', '1 contra 1'], ['Termina', 'Cuando queda 1']],
       special: [
         'Si sacan lo mismo, repiten el duelo; no se registra nada.',

@@ -23,7 +23,7 @@ MCR.screens = MCR.screens || {};
       picks: [],
       active: null,
       teams: [[], []],
-      seconds: 60,
+      seconds: 90,
       deck: [],
       idx: 0,
       score: [0, 0],
@@ -76,14 +76,14 @@ MCR.screens = MCR.screens || {};
     return MCR.ui.gameRulesPage({
       headerSub: 'Léelo en voz alta tal cual.',
       title: 'Sándwich de letras',
-      goal: 'Que tu equipo encuentre más palabras.',
       steps: [
-        'Les voy a enseñar dos letras: con una empieza la palabra y con la otra termina.',
-        'Por ejemplo, P y A… ¡pizza!',
-        'El primer equipo que grite una palabra que funcione se lleva el punto, y sale otro par.'
+        'Se formarán en dos filas y habrá un pollo en medio.',
+        'Yo les daré dos letras: una con la que empieza la palabra y otra con la que termina.',
+        'El primero que tome el pollo tendrá la oportunidad de responder. Si la respuesta es correcta, su equipo gana un punto; si se equivoca o tarda demasiado, no recibe ningún punto.',
+        'Jugaremos durante un minuto y medio.'
       ],
-      win: 'Cuando se acabe el tiempo, gana el equipo con más puntos.',
-      facts: [['Equipos', '2 · mínimo 1 por equipo'], ['Ronda', 'Duración a elegir'], ['Punto', '1 por palabra válida']],
+      win: 'El equipo que junte más puntos al final será el ganador, y el equipo que pierda recibirá toques.',
+      facts: [['Equipos', '2 · mínimo 1 por equipo'], ['Ronda', '1 min 30 s'], ['Punto', '1 por palabra válida']],
       special: [
         'Si sumaste el punto al equipo equivocado, «Deshacer último punto» lo corrige.',
         '«Pausar» detiene el reloj sin perder el marcador.',

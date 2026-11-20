@@ -75,14 +75,12 @@ MCR.screens = MCR.screens || {};
       headerSub: 'Léelo en voz alta tal cual.',
       title: 'Caricaturas eléctricas',
       origin: 'En el programa: «Caricaturas eléctricas». Ahí, quien falla recibe una descarga y se va al sillón de la vergüenza.',
-      goal: 'Aguantar más que nadie diciendo cosas de la categoría.',
       steps: [
-        'Yo les digo una categoría.',
-        'Por turnos, cada quien dice algo que entre ahí: rápido y sin repetir.',
-        'Si te trabas, repites o dices algo que no va, quedas fuera y entra alguien más.',
-        'Al final quedan dos y se juegan una última categoría.'
+        'Yo les diré una categoría.',
+        'Uno a uno, irán diciendo al ritmo palabras que pertenezcan a esa categoría.',
+        'Quien repita, se equivoque o se tarde en contestar, recibirá toques… y entra alguien más en su lugar.'
       ],
-      win: 'Gana quien no falle en la final.',
+      win: 'Gana quien aguante hasta el final sin equivocarse.',
       facts: [['Arrancan', '3 personas'], ['Reemplazos', 'Hasta 2'], ['Final', '1 contra 1']],
       special: [
         'Las categorías ya usadas se bloquean; «Permitir repetir usadas» las vuelve a habilitar.',

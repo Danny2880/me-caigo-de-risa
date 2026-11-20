@@ -111,14 +111,12 @@ MCR.screens = MCR.screens || {};
       title: 'Teléfono descompuesto',
       headerSub: 'Puedes leerlo en voz alta tal cual.',
       origin: 'En el programa: «Teléfono descompuesto», con el mismo nombre.',
-      goal: 'Que la película llegue completa hasta el final de la fila, solo con mímica.',
       steps: [
-        'Hagan una fila por equipo, todos de espaldas a quien va adelante.',
-        'Al primero le enseño una película. Le toca el hombro al de atrás, que se voltea, y tiene 10 segundos para actuársela.',
-        'Así se la van pasando, de uno en uno, hasta el final de la fila.',
-        'El último me dice qué película cree que es.'
+        'Yo le diré el nombre de una película al primero de la fila.',
+        'Cada uno se la irá pasando al siguiente solo con mímica. Tendrán 10 segundos.',
+        'Al final veremos si el último adivina.'
       ],
-      win: 'Si adivina, su equipo gana. Ojo: nada de hablar, hacer ruidos ni voltear antes de tiempo.',
+      win: 'Si adivina, ¡ganan! Si no, serán los perdedores.',
       facts: [['Equipos', '2 · mínimo 2 por equipo'], ['Mímica', '10 s por persona'], ['Quien adivina', 'Sin reloj']],
       special: [
         'No se vale hablar, hacer sonidos, señalar letras ni voltear antes del toque en el hombro.',
