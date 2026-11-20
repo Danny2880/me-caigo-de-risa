@@ -884,11 +884,6 @@ MCR.ui = (function () {
       }),
       h('div', { class: 'rules-content' },
         h('section', { class: 'panel rule-guide', 'aria-label': 'Cómo se juega' },
-          opts.script ? h('div', { class: 'rule-block rule-script' },
-            h('h3', { class: 'rule-label' }, '🎤 Para explicarlo en voz alta'),
-            h('p', { class: 'rule-script-text' }, opts.script),
-            opts.origin ? h('p', { class: 'rule-origin' }, opts.origin) : null
-          ) : null,
           opts.goal || opts.summary ? h('div', { class: 'rule-block' },
             h('h3', { class: 'rule-label' }, 'Objetivo'),
             h('p', { class: 'rule-guide-summary' }, opts.goal || opts.summary)
@@ -901,7 +896,8 @@ MCR.ui = (function () {
             h('h3', { class: 'rule-label' }, 'Cómo se gana'),
             h('p', null, opts.win)
           ) : null,
-          opts.note ? h('p', { class: 'rule-guide-note' }, opts.note) : null
+          opts.note ? h('p', { class: 'rule-guide-note' }, opts.note) : null,
+          opts.origin ? h('p', { class: 'rule-origin' }, opts.origin) : null
         ),
         opts.aside || h('aside', { class: 'panel rules-aside' },
           facts.length ? h('div', { class: 'rule-facts' }, facts.map(([label, value]) =>

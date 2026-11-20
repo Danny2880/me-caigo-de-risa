@@ -110,16 +110,15 @@ MCR.screens = MCR.screens || {};
     return MCR.ui.gameRulesPage({
       title: 'Teléfono descompuesto',
       headerSub: 'Puedes leerlo en voz alta tal cual.',
-      script: '¡Fórmense en fila y denle la espalda a quien va adelante! La primera persona ve una película y, sin decir ni pío, se la actúa a quien sigue en 10 segundos. Esa persona se la pasa a la siguiente… y la última tiene que adivinar cuál era. ¿Llegará la película o llegará otra cosa?',
       origin: 'En el programa: «Teléfono descompuesto», con el mismo nombre.',
-      goal: 'Que la película llegue intacta desde la primera persona de la fila hasta la última, usando solo mímica.',
+      goal: 'Que la película llegue completa hasta el final de la fila, solo con mímica.',
       steps: [
-        'Cada equipo forma una fila, todos de espaldas a quien va adelante. Juega un equipo y luego el otro, cada uno con su propia película.',
-        'La primera persona ve la película en la tablet. Toca el hombro de quien sigue; esa persona se voltea y observa 10 segundos de mímica.',
-        'Quien acaba de observar toca el hombro de la siguiente persona y repite, también en 10 segundos, lo que entendió. Así hasta el final de la fila.',
-        'La última persona no actúa: dice en voz alta qué película cree que es, sin límite de tiempo. Después se revela la respuesta.'
+        'Hagan una fila por equipo, todos de espaldas a quien va adelante.',
+        'Al primero le enseño una película. Le toca el hombro al de atrás, que se voltea, y tiene 10 segundos para actuársela.',
+        'Así se la van pasando, de uno en uno, hasta el final de la fila.',
+        'El último me dice qué película cree que es.'
       ],
-      win: 'Gana el equipo que adivine su película. Si los dos aciertan es empate; si ninguno acierta, nadie gana.',
+      win: 'Si adivina, su equipo gana. Ojo: nada de hablar, hacer ruidos ni voltear antes de tiempo.',
       facts: [['Equipos', '2 · mínimo 2 por equipo'], ['Mímica', '10 s por persona'], ['Quien adivina', 'Sin reloj']],
       special: [
         'No se vale hablar, hacer sonidos, señalar letras ni voltear antes del toque en el hombro.',

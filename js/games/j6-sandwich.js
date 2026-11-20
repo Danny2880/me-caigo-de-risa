@@ -74,16 +74,15 @@ MCR.screens = MCR.screens || {};
 
   function viewRules() {
     return MCR.ui.gameRulesPage({
+      headerSub: 'Léelo en voz alta tal cual.',
       title: 'Sándwich de letras',
-      script: 'Dos equipos, dos letras: una para empezar y otra para terminar. Por ejemplo, P y A… ¡Pizza! El primer equipo que grite una palabra que quepa en ese sándwich se lleva el punto. Cuando se acabe el reloj, gana el equipo con más puntos.',
-      goal: 'Que tu equipo encuentre más palabras «sándwich»: que empiecen con una letra y terminen con otra.',
+      goal: 'Que tu equipo encuentre más palabras.',
       steps: [
-        'Se forman dos equipos y se fija la duración de la ronda.',
-        'Al iniciar el reloj aparece un par de letras: la inicial y la final de la palabra que hay que encontrar.',
-        'Los dos equipos compiten al mismo tiempo. El primero que diga en voz alta una palabra válida gana el punto y aparece un par nuevo.',
-        'Si nadie encuentra palabra, quien conduce toca «Saltar par» y aparece otro. Se juega hasta que termina el reloj.'
+        'Les voy a enseñar dos letras: con una empieza la palabra y con la otra termina.',
+        'Por ejemplo, P y A… ¡pizza!',
+        'El primer equipo que grite una palabra que funcione se lleva el punto, y sale otro par.'
       ],
-      win: 'Gana el equipo con más puntos. Si empatan, se juega un par de desempate sin reloj: el primer equipo que acierte gana.',
+      win: 'Cuando se acabe el tiempo, gana el equipo con más puntos.',
       facts: [['Equipos', '2 · mínimo 1 por equipo'], ['Ronda', 'Duración a elegir'], ['Punto', '1 por palabra válida']],
       special: [
         'Si sumaste el punto al equipo equivocado, «Deshacer último punto» lo corrige.',

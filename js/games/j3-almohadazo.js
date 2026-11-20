@@ -90,16 +90,15 @@ MCR.screens = MCR.screens || {};
 
   function viewRules() {
     return MCR.ui.gameRulesPage({
+      headerSub: 'Léelo en voz alta tal cual.',
       title: 'Almohadazo',
-      script: '¡Uno contra uno, plumón en mano! Les doy una sílaba y escriben en el pizarrón todas las palabras que empiecen —o terminen— con ella antes de que se acabe el tiempo. Mismo reloj para los dos. Gana quien llene más el pizarrón.',
-      goal: 'Escribir en el pizarrón más palabras válidas que tu rival.',
+      goal: 'Escribir más palabras que tu rival.',
       steps: [
-        'Se enfrentan dos personas. Cada una juega su propio turno, con una consigna distinta.',
-        'Antes de cada turno se elige si las palabras deben empezar o terminar con una sílaba, y cuál. Cada turno puede elegir cualquiera de los dos modos; solo no se repite la misma consigna.',
-        'Al iniciar el reloj, la persona escribe en el pizarrón todas las palabras que pueda. Las dos tienen exactamente el mismo tiempo.',
-        'Al terminar cada turno, cuenten en voz alta las palabras válidas y regístrenlas.'
+        'Pasan dos. A cada quien le doy una sílaba y le digo si las palabras empiezan o terminan con ella.',
+        'Cuando arranque el reloj, escribe en el pizarrón todas las que se te ocurran.',
+        'Los dos tienen el mismo tiempo. Al final contamos.'
       ],
-      win: 'Gana quien tenga más palabras válidas. Si empatan, muerte súbita: se elige una consigna nueva, dicen palabras en voz alta por turnos y pierde quien se equivoque, repita o se quede sin respuesta.',
+      win: 'Gana quien tenga más palabras bien escritas. Si empatan, muerte súbita: las dicen en voz alta por turnos y pierde el primero que falle.',
       facts: [['Duelo', '1 contra 1'], ['Tiempo', 'El mismo para ambos'], ['Empate', 'Muerte súbita']],
       special: [
         'No cuenta una palabra repetida, mal escrita o que no cumpla la sílaba.',

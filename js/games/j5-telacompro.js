@@ -74,17 +74,16 @@ MCR.screens = MCR.screens || {};
 
   function viewRules() {
     return MCR.ui.gameRulesPage({
+      headerSub: 'Léelo en voz alta tal cual.',
       title: 'Te la compro',
-      script: 'Les doy una categoría y empieza la subasta: «Yo digo cuatro», «¡Yo cinco!». Sube la apuesta… o, si crees que alguien está echando mentiras, dile «¡Te la compro!». Si cumple, sales tú; si no cumple, sale quien apostó. Al final queda una sola persona.',
       origin: 'En el programa: «Te la compro», con el mismo nombre.',
-      goal: 'Ser la última persona en la subasta: apuesta con valor, pero no prometas más de lo que puedes cumplir.',
+      goal: 'Ser el último que quede en la subasta.',
       steps: [
-        'Se anuncia una categoría. Quien abre la ronda hace la apuesta inicial: cuántas palabras de esa categoría puede decir («yo digo 4»).',
-        'El turno pasa a la derecha, en el orden de la mesa; después del último vuelve al primero. Cada quien sube la apuesta o dice «Te la compro» a quien hizo la última apuesta.',
-        'Quien hizo esa apuesta debe decir en voz alta esa cantidad de palabras válidas, sin repetir.',
-        'Si lo logra, sale quien compró. Si no lo logra, sale quien apostó. Sigue otra ronda con quienes quedan, en el mismo orden.'
+        'Les digo una categoría. El primero dice cuántas cosas de esa categoría puede decir: «yo digo cuatro».',
+        'El siguiente sube la apuesta… o le dice «¡Te la compro!».',
+        'Si te la compran, tienes que decir todas las que prometiste, sin repetir.'
       ],
-      win: 'Gana la última persona que queda en la subasta.',
+      win: 'Si cumples, sale quien te la compró. Si no, sales tú. Seguimos hasta que quede uno.',
       facts: [['Jugadores', '3 a 6 (ideal 5)'], ['Por ronda', 'Sale 1 persona'], ['Rondas', 'Hasta que queda 1']],
       special: [
         'La primera persona de cada ronda no puede comprar: todavía no hay apuesta.',

@@ -72,17 +72,17 @@ MCR.screens = MCR.screens || {};
 
   function viewRules() {
     return MCR.ui.gameRulesPage({
+      headerSub: 'Léelo en voz alta tal cual.',
       title: 'Caricaturas eléctricas',
-      script: '¡Tres valientes al frente! Les doy una categoría y, por turnos, cada quien dice algo que entre ahí: rapidito y sin repetir. ¿Te trabaste? ¿Repetiste? ¡Fuera! Entra alguien más y seguimos. Las dos últimas personas se juegan la final.',
       origin: 'En el programa: «Caricaturas eléctricas». Ahí, quien falla recibe una descarga y se va al sillón de la vergüenza.',
-      goal: 'Ser la última persona en pie diciendo palabras de la categoría sin repetir ni trabarse.',
+      goal: 'Aguantar más que nadie diciendo cosas de la categoría.',
       steps: [
-        'Arrancan tres personas. Quien conduce elige una categoría en la tablet y la anuncia en voz alta.',
-        'Por turnos y sin pausas, cada quien dice una palabra que pertenezca a la categoría.',
-        'Quien repite, se traba, tarda demasiado o dice algo que no corresponde queda fuera. Entra un reemplazo y se elige una categoría nueva.',
-        'Hay 2 reemplazos, así que en total juegan 5. Cuando se acaban, la siguiente persona eliminada deja a dos finalistas, que se enfrentan con una última categoría.'
+        'Yo les digo una categoría.',
+        'Por turnos, cada quien dice algo que entre ahí: rápido y sin repetir.',
+        'Si te trabas, repites o dices algo que no va, quedas fuera y entra alguien más.',
+        'Al final quedan dos y se juegan una última categoría.'
       ],
-      win: 'Gana quien no falle en la final. Quien falla en la final queda en segundo lugar.',
+      win: 'Gana quien no falle en la final.',
       facts: [['Arrancan', '3 personas'], ['Reemplazos', 'Hasta 2'], ['Final', '1 contra 1']],
       special: [
         'Las categorías ya usadas se bloquean; «Permitir repetir usadas» las vuelve a habilitar.',

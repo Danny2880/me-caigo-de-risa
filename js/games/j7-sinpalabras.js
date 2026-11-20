@@ -75,17 +75,16 @@ MCR.screens = MCR.screens || {};
 
   function viewRules() {
     return MCR.ui.gameRulesPage({
+      headerSub: 'Léelo en voz alta tal cual.',
       title: 'Sin palabras',
-      script: 'Una persona se pone audífonos con la música a todo volumen. Su pareja le dice palabras… ¡pero solo moviendo los labios! Sin voz y sin señas. Cuantas más adivinen antes de que se acabe el tiempo, más puntos. Gana la pareja con más palabras.',
       origin: 'Inspirado en «Ni hablar» del programa, donde una frase se pasa leyendo los labios con audífonos puestos.',
-      goal: 'Adivinar el mayor número de palabras leyendo los labios de tu pareja.',
+      goal: 'Adivinar más palabras que las otras parejas.',
       steps: [
-        'Se juega por parejas, una pareja a la vez. Una persona se pone audífonos con música alta (🎧 adivina) y la otra mira la tablet (🗣️ dice).',
-        'Al iniciar el reloj aparece una palabra. Quien dice la articula solo con los labios: sin voz, sin sonidos y sin señas.',
-        'Si la adivinan, toca «Correcta» y sale otra. Si se atoran, «Paso» la cambia sin sumar.',
-        'Al terminar el tiempo se confirma si la última palabra alcanzó a entrar. Después juega la siguiente pareja.'
+        'Juegan por parejas. Uno se pone audífonos con la música a todo volumen.',
+        'El otro ve la palabra y se la dice solo moviendo la boca: sin voz y sin señas.',
+        'Si la adivinan, va otra. Si se atoran, pueden pasar.'
       ],
-      win: 'Gana la pareja con más palabras correctas. Si empatan en primer lugar, comparten la victoria.',
+      win: 'Gana la pareja que adivine más palabras antes de que se acabe el tiempo.',
       facts: [['Parejas', 'Una a la vez'], ['Tiempo', 'El mismo para todas'], ['Punto', '1 por palabra']],
       special: [
         'La persona con audífonos no debe ver la pantalla.',

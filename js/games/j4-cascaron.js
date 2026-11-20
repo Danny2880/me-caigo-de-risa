@@ -59,17 +59,16 @@ MCR.screens = MCR.screens || {};
 
   function viewRules() {
     return MCR.ui.gameRulesPage({
+      headerSub: 'Léelo en voz alta tal cual.',
       title: 'Cascarón Piratas',
-      script: '¡Dos filas, frente a frente! Las primeras personas de cada fila se enfrentan a piedra, papel o tijera, pero gritando «¡Pi-ra-tas!». Quien gana se salva; quien pierde se va al final de su fila a esperar otra oportunidad. Y la última persona que quede… ¡se lleva el cascarón!',
       origin: 'Inspirado en «¡Échale huevos!» del programa.',
-      goal: 'Salvarte ganando un duelo antes de que te conviertas en la última persona en riesgo.',
+      goal: 'Salvarte antes de quedar al último.',
       steps: [
-        'El grupo se divide en dos filas, una frente a la otra.',
-        'Pasan al frente las primeras personas de cada fila y juegan piedra, papel o tijera diciendo «¡Pi-ra-tas!» en lugar de «piedra, papel o tijera».',
-        'Quien gana queda a salvo y sale de la fila. Quien pierde vuelve al final de su propia fila y espera otro duelo.',
-        'Si una fila se queda vacía, el último de la otra fila pasa a ser el primero de la fila vacía. Se sigue hasta que solo quede una persona.'
+        'Hagan dos filas, una frente a la otra.',
+        'Los primeros de cada fila juegan piedra, papel o tijera, pero gritando «¡Pi-ra-tas!».',
+        'Quien gana se salva y sale. Quien pierde se va al final de su fila y espera otra oportunidad.'
       ],
-      win: 'La última persona en riesgo es el gran perdedor y le toca el cascarón. Quienes se salvaron sin perder ningún duelo terminan invictos y suman una victoria.',
+      win: 'El último que quede… ¡se lleva el cascarón!',
       facts: [['Participan', 'Todo el grupo · mínimo 2'], ['Duelo', '1 contra 1'], ['Termina', 'Cuando queda 1']],
       special: [
         'Si sacan lo mismo, repiten el duelo; no se registra nada.',
