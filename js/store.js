@@ -307,6 +307,26 @@ MCR.store = (function () {
     return true;
   }
 
+  /* Lista guardada → «Cargar lista»: quienes vienen en ella quedan presentes
+     (se agregan si no existen) y el resto pasa a ausente. No borra a nadie ni
+     toca el historial. Devuelve cuántas personas nuevas se agregaron. */
+  function applyRoster(names) {
+    const keys = new Set();
+    let added = 0;
+    names.forEach((name) => {
+      const p = addPlayer(name);
+      if (!p) return;
+      if (!p.reused) added++;
+      keys.add(normName(p.name));
+    });
+    state.players.forEach((p) => {
+      if (p.archived) return;
+      if (keys.has(normName(p.name))) delete p.absent; else p.absent = true;
+    });
+    save();
+    return added;
+  }
+
   function setPresent(id, present) {
     const p = state.players.find((x) => x.id === id);
     if (!p) return;
@@ -576,7 +596,7 @@ MCR.store = (function () {
   return {
     load, save, flush,
     get: () => state,
-    players, roster, addPlayer, renamePlayer, removePlayer, setPresent, byId, nameOf,
+    players, roster, addPlayer, renamePlayer, removePlayer, setPresent, applyRoster, byId, nameOf,
     recordEvent, removeEvent, eventsFor, stats, recommend, recommendFresh, rank,
     live,
     makeTeams, rememberTeams, shuffle, pairKey,

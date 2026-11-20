@@ -261,3 +261,8 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 - **Películas**: 45 (se sumaron Vaselina, Dumbo, Toy Story, Mi villano favorito, Madagascar…). La migración solo agrega las que faltan.
 - **Frase de la plancha** (`MCR.ui.plank`): en la pantalla final, quien pierde ve «🏴‍☠️ ¡X tendrá que caminar por la plancha!». Te la compro: si cumplió quien apostó, sale quien compró con «🦈 ¡A X lo arrojaremos a los tiburones!».
 - **Sonido de error**: `sounds/error.wav` es el buzzer sin los 1.75 s de silencio inicial. Se precarga al primer toque y se toca desde memoria con Web Audio.
+
+## 19. Guardar y cargar la lista de jugadores (v15)
+
+- En **Jugadores → Guardar lista**: «💾 Guardar lista» descarga `lista-jugadores-AAAA-MM-DD.json` con los nombres presentes. «📂 Cargar lista» lee ese archivo: quienes vienen en él quedan presentes (se agregan si faltan) y el resto pasa a ausente. No borra a nadie ni el historial (`MCR.store.applyRoster`).
+- Las actualizaciones de la app (GitHub/Netlify) **no borran** la lista guardada en cada navegador; la lista sirve para pasarla a otro dispositivo. Para que una lista sea la base para todos, va en `seedPlayers` (data.js) con una migración.

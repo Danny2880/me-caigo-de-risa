@@ -441,11 +441,66 @@ console.info('Me caigo de risa · build', MCR.BUILD);
         all.length ? h('div', { class: 'list player-management-list' }, present.concat(absent).map(row))
           : h('div', { class: 'empty mt-s' }, 'Todavía no hay jugadores. Añade el primero arriba.')
       ),
+      rosterFilePanel(present),
       historyPanel()
     );
 
     root.append(view);
   };
+
+  /* Guardar / cargar la lista de jugadores como archivo. Sirve para pasarla a
+     otra tablet o al sitio publicado. Las actualizaciones de la app no la borran. */
+  function rosterFilePanel(present) {
+    const fileInput = h('input', { type: 'file', accept: '.json,application/json', style: { display: 'none' } });
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files && fileInput.files[0];
+      fileInput.value = '';
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        let names = null;
+        try {
+          const data = JSON.parse(reader.result);
+          names = Array.isArray(data) ? data : data && Array.isArray(data.players) && data.players.every((x) => typeof x === 'string') ? data.players : null;
+        } catch (e) { names = null; }
+        names = (names || []).map((x) => String(x || '').trim()).filter(Boolean);
+        if (!names.length) { MCR.ui.toast('Ese archivo no es una lista de jugadores'); return; }
+        MCR.ui.confirm('Cargar lista',
+          'Quedarán presentes las ' + names.length + ' personas de la lista y el resto pasará a «Ausente». No se borra a nadie ni el historial.',
+          'Sí, cargar lista').then((ok) => {
+          if (!ok) return;
+          const added = MCR.store.applyRoster(names);
+          MCR.go('players');
+          MCR.ui.toast('Lista cargada: ' + names.length + ' presentes' + (added ? ' · ' + added + ' nuevas' : ''));
+        });
+      };
+      reader.readAsText(f);
+    });
+
+    const save = () => {
+      const names = present.map((p) => p.name);
+      const d = new Date();
+      const stamp = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const blob = new Blob([JSON.stringify({ type: 'mcr-lista-jugadores', date: d.toISOString(), players: names }, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = h('a', { href: url, download: 'lista-jugadores-' + stamp + '.json' });
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      MCR.ui.toast('Lista guardada · ' + names.length + ' jugadores');
+    };
+
+    return h('div', { class: 'panel mt' },
+      h('h2', { class: 'panel-title' }, 'Guardar lista'),
+      h('p', { class: 'roster-note' }, 'Las actualizaciones de la app no borran esta lista. Para usarla en otra tablet o en el sitio publicado: guárdala aquí y cárgala allá.'),
+      h('div', { class: 'row mt-s' },
+        h('button', { class: 'btn btn-gold', disabled: !present.length, onclick: save }, '💾 Guardar lista (' + present.length + ')'),
+        h('button', { class: 'btn btn-ghost', onclick: () => fileInput.click() }, '📂 Cargar lista'),
+        fileInput
+      )
+    );
+  }
 })();
 
 /* ---------- ajustes ---------- */
