@@ -554,7 +554,12 @@ MCR.screens = MCR.screens || {};
       h('div', { class: 'stage' },
         h('div', { class: 'stage-label' }, tie ? 'Empate en el primer lugar' : 'Mejor pareja'),
         h('div', { class: 'stage-word sm' }, tie ? bestPairs.map(pairName).join(' · ') : pairName(best)),
-        h('div', { class: 'stage-note' }, best.correct + (best.correct === 1 ? ' palabra adivinada' : ' palabras adivinadas'))
+        h('div', { class: 'stage-note' }, best.correct + (best.correct === 1 ? ' palabra adivinada' : ' palabras adivinadas')),
+        (() => {
+          const worst = sorted[sorted.length - 1];
+          if (sorted.length < 2 || worst.correct === best.correct) return null;
+          return MCR.ui.plank(S.results.filter((r) => r.correct === worst.correct).map(pairName));
+        })()
       ),
       h('div', { class: 'panel' },
         h('div', { class: 'panel-title' }, 'Resultados'),

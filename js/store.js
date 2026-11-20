@@ -127,6 +127,25 @@ MCR.store = (function () {
       st.settings.contentV12 = true;
       save();
     }
+    /* v13: ejemplos de piratas y chistosos en los pares del catálogo y películas
+       nuevas. Los pares y películas añadidos a mano se conservan. */
+    if (!st.settings.contentV13) {
+      const custom = (content.letterPairs || []).filter((p) => !/^lp\d+$/.test(p.id || ''));
+      content.letterPairs = clone(MCR.data.letterPairs).concat(custom);
+      st.used = st.used || {};
+      st.used.letterPairs = (st.used.letterPairs || []).filter((id) => content.letterPairs.some((p) => p.id === id));
+      content.movies = content.movies || [];
+      const titles = new Set(content.movies.map((m) => normName(m.title)));
+      MCR.data.movies.forEach((m) => {
+        if (!titles.has(normName(m.title))) {
+          const id = content.movies.some((x) => x.id === m.id) ? uid('mv_') : m.id;
+          content.movies.push({ id, title: m.title });
+          titles.add(normName(m.title));
+        }
+      });
+      st.settings.contentV13 = true;
+      save();
+    }
     if (!content.auction.length && !(st.used && st.used.auction || []).length) return;
 
     const byName = new Map();

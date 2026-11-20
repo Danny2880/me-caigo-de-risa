@@ -782,6 +782,7 @@ MCR.screens = MCR.screens || {};
           winner === 'empate' ? '¡Empate! Los dos adivinaron' : winner === 'nadie' ? 'Nadie adivinó…' : teamName(winner) + ' gana')
       ),
       h('div', { class: 'score' }, side(0), h('div', { class: 'score-vs' }, 'VS'), side(1)),
+      MCR.ui.plank([0, 1].filter((i) => !ok[i]).map((i, j) => (j ? 'el ' : 'El ') + teamName(i))),
       MCR.ui.finishBar({
         route: 'game:telefono',
         event: () => ({

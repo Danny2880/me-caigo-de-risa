@@ -367,7 +367,8 @@ MCR.screens = MCR.screens || {};
       h('div', { class: 'stage' },
         h('div', { class: 'stage-label' }, 'Gran perdedor'),
         h('div', { class: 'stage-word' }, MCR.store.nameOf(S.loser)),
-        h('div', { class: 'stage-note' }, '¡Le toca el cascarón!')
+        h('div', { class: 'stage-note' }, '¡Le toca el cascarón!'),
+        MCR.ui.plank(MCR.store.nameOf(S.loser))
       ),
       h('div', { class: 'grid grid-2' },
         h('div', { class: 'panel' },

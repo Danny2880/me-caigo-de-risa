@@ -523,7 +523,8 @@ MCR.screens = MCR.screens || {};
       h('div', { class: 'stage' },
         h('div', { class: 'stage-label' }, S.winner ? 'Ganador del duelo' : 'Empate · almohadazo a los dos'),
         h('div', { class: 'stage-word' }, S.winner ? MCR.store.nameOf(S.winner) : S.pair.map((id) => MCR.store.nameOf(id)).join(' y ')),
-        h('div', { class: 'stage-note' }, S.sudden ? 'Por muerte súbita (' + S.counts[0] + ' — ' + S.counts[1] + ' en el pizarrón)' : S.counts[0] + ' — ' + S.counts[1])
+        h('div', { class: 'stage-note' }, S.sudden ? 'Por muerte súbita (' + S.counts[0] + ' — ' + S.counts[1] + ' en el pizarrón)' : S.counts[0] + ' — ' + S.counts[1]),
+        MCR.ui.plank(S.winner ? MCR.store.nameOf(S.loser) : S.pair.map((id) => MCR.store.nameOf(id)))
       ),
       h('div', { class: 'panel' },
         h('div', { class: 'panel-title' }, 'Duelos de esta sesión'),

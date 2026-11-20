@@ -387,7 +387,10 @@ MCR.screens = MCR.screens || {};
         h('div', { class: 'stage-word tlc-out-name' }, '✕ ' + nm(o.id)),
         h('div', { class: 'stage-note' }, o.reason === 'cumplió'
           ? nm(o.challenged) + ' sí dijo ' + words(o.bid) + ': sale quien compró.'
-          : nm(o.challenged) + ' no logró ' + words(o.bid) + ': sale quien apostó.')
+          : nm(o.challenged) + ' no logró ' + words(o.bid) + ': sale quien apostó.'),
+        o.reason === 'cumplió'
+          ? h('div', { class: 'plank-line' }, '🦈 ¡A ' + nm(o.id) + ' lo arrojaremos a los tiburones!')
+          : MCR.ui.plank(nm(o.id))
       ),
       orderPanel({ turn: S.opener, retire: false }),
       h('div', { class: 'action-bar' },

@@ -424,6 +424,7 @@ MCR.screens = MCR.screens || {};
           winner == null ? '¡Empate ' + a + ' — ' + b + '!' : 'Gana el Equipo ' + (winner + 1) + ' · ' + Math.max(a, b) + ' a ' + Math.min(a, b) + (S.tiebreak != null ? ' (desempate)' : ''))
       ),
       scoreBoard(winner),
+      winner == null ? null : MCR.ui.plank('El Equipo ' + (2 - winner)),
       h('p', { class: 'roster-note center' }, S.rounds + (S.rounds === 1 ? ' palabra encontrada' : ' palabras encontradas') + '. Los pares usados no vuelven a salir hasta agotar el mazo.'),
       MCR.ui.finishBar({
         route: 'game:sandwich',

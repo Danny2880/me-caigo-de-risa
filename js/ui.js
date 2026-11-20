@@ -483,7 +483,7 @@ MCR.ui = (function () {
   let visualMode = false;
 
   /* ---------- efectos de sonido ----------
-     Error: sounds/error.mp3. Correcto: campanita generada con Web Audio,
+     Error: sounds/error.wav (buzzer sin el silencio inicial). Correcto: campanita generada con Web Audio,
      así no depende de ningún archivo. Se usan en Caricaturas (botón «✕ ¡Error!»),
      Te la compro (veredicto) y Teléfono (respuesta final). */
   const sfx = (() => {
@@ -515,23 +515,59 @@ MCR.ui = (function () {
       tone(880, 0, 0.18, 'triangle', 0.4);
       tone(1318.5, 0.12, 0.45, 'triangle', 0.4);
     }
+    /* El buzzer se descarga y decodifica una sola vez (al primer toque en la
+       pantalla) y se toca desde memoria con Web Audio: suena al instante. */
+    let errBuffer = null;
+    let errLoading = null;
+    function loadError() {
+      const c = audioCtx();
+      if (!c || errBuffer || errLoading) return errLoading;
+      errLoading = fetch('sounds/error.wav')
+        .then((r) => r.arrayBuffer())
+        .then((data) => new Promise((ok, fail) => c.decodeAudioData(data, ok, fail)))
+        .then((buf) => { errBuffer = buf; })
+        .catch(() => { errLoading = null; });
+      return errLoading;
+    }
+    function playBuffer() {
+      const c = audioCtx();
+      const src = c.createBufferSource();
+      src.buffer = errBuffer;
+      src.connect(c.destination);
+      src.start(0);
+    }
     function error() {
       try {
-        if (!errAudio) errAudio = new Audio('sounds/error.mp3');
-        errAudio.pause();
+        if (errBuffer) return playBuffer();
+        if (!errAudio) errAudio = new Audio('sounds/error.wav');
         errAudio.currentTime = 0;
         const p = errAudio.play();
         if (p && p.catch) p.catch(() => { tone(140, 0, 0.6, 'sawtooth', 0.3); });
+        loadError();
       } catch (e) {
         tone(140, 0, 0.6, 'sawtooth', 0.3);
       }
     }
+    /* Precarga en el primer toque (los navegadores no dejan crear audio antes). */
+    document.addEventListener('pointerdown', function warm() {
+      document.removeEventListener('pointerdown', warm, true);
+      loadError();
+    }, true);
     /* Botón grande de error para el momento en que alguien se equivoca. */
     function errorButton() {
       return h('button', { class: 'btn btn-danger btn-xl sfx-error-btn', title: 'Suena el sonido de error', onclick: error }, '✕ ¡Error!');
     }
     return { ok, error, errorButton };
   })();
+
+  /* Frase pirata para quien pierde: «¡X tendrá que caminar por la plancha!».
+     names = texto o lista de nombres; con 2 o más usa plural. */
+  function plank(names) {
+    const list = [].concat(names || []).filter(Boolean);
+    if (!list.length) return null;
+    const who = list.length === 1 ? list[0] : list.slice(0, -1).join(', ') + ' y ' + list[list.length - 1];
+    return h('div', { class: 'plank-line' }, '🏴‍☠️ ¡' + who + (list.length === 1 ? ' tendrá' : ' tendrán') + ' que caminar por la plancha!');
+  }
 
   function shell(opts) {
     const root = h('div', { class: 'game' + (visualMode ? ' visual' : '') });
@@ -1473,6 +1509,6 @@ MCR.ui = (function () {
     h, clear, fmt, durationText, durationPicker, initials, avatar, toast, dialog, confirm, reveal, swapPlayer, withSwapped, choiceGrid, confirmBtn, ring, countdown,
     newTimer, timerView, endGame, recordWithUndo, finishBar,
     shell, gameNavigation, playerGrid, playerMeta, peoplePicker, fairOrder, searchIcon, picker, playerList, quickAdd,
-    sfx, columnOrder, setupHead, stepBar, gameFlow, gameIntro, gameRulesPage, ruleGuide, teamRow, teamBoard, teamBalance
+    sfx, plank, columnOrder, setupHead, stepBar, gameFlow, gameIntro, gameRulesPage, ruleGuide, teamRow, teamBoard, teamBalance
   };
 })();

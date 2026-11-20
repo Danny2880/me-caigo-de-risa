@@ -342,7 +342,8 @@ MCR.screens = MCR.screens || {};
       h('div', { class: 'stage' },
         h('div', { class: 'stage-label' }, 'Ganador'),
         h('div', { class: 'stage-word' }, MCR.store.nameOf(S.winner)),
-        h('div', { class: 'stage-note' }, 'Segundo lugar: ' + MCR.store.nameOf(S.loser))
+        h('div', { class: 'stage-note' }, 'Segundo lugar: ' + MCR.store.nameOf(S.loser)),
+        MCR.ui.plank(MCR.store.nameOf(S.loser))
       ),
       h('div', { class: 'panel' },
         h('div', { class: 'panel-title' }, 'Orden de salida'),

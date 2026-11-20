@@ -245,7 +245,7 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 - **Categorías**: 9 nuevas (pizza, bolsa de una mujer, ponche, salsas, árboles frutales, animales de cuatro patas, criaturas mitológicas, quesos, nombres de hombre con G). En Caricaturas y Te la compro se muestran en **orden alfabético**.
 - **Pares de letras**: catálogo de 135 pares fáciles; cada uno trae hasta 5 ejemplos (`ex`). Se quitaron los difíciles (X, Ñ, K, Q–R…). En la partida, «👀 Ejemplos» los muestra solo a quien conduce (se ocultan en modo público y al cambiar de par). En el gestor, los pares tienen un campo «Ejemplos».
 - **Migración `contentV12`** (store.js): suma categorías y palabras sin borrar lo personalizado; reemplaza los pares del catálogo (id `lp…`) y conserva los añadidos a mano.
-- **Sonidos** (solo donde se necesitan): Caricaturas tiene un botón «✕ ¡Error!» en la ronda y en la final; en Te la compro el veredicto («Sí / No lo logró») y en Teléfono la respuesta final («Sí / No adivinó») suenan solos. Error = `sounds/error.mp3`; correcto = campanita generada con Web Audio (`MCR.ui.sfx`).
+- **Sonidos** (solo donde se necesitan): Caricaturas tiene un botón «✕ ¡Error!» en la ronda y en la final; en Te la compro el veredicto («Sí / No lo logró») y en Teléfono la respuesta final («Sí / No adivinó») suenan solos. Error = `sounds/error.wav`; correcto = campanita generada con Web Audio (`MCR.ui.sfx`).
 
 ## 17. Reglas del conductor, empate en Almohadazo y Formar equipos (v13)
 
@@ -254,3 +254,10 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 - **Sándwich**: duración por defecto 1 min 30 s.
 - **Formar equipos** (`js/games/j8-equipos.js`, ruta `game:equipos`): tarjeta aparte en el catálogo. Elige 2 o 3 equipos y quiénes participan; mezcla con `makeTeams` (diferencia máx. 1). No registra partidas.
 - `index.html` usa `?v=` en cada archivo: **súbelo en cada cambio** para que tabletas y Netlify no usen la versión vieja guardada.
+
+## 18. Contenido pirata, frase de la plancha y sonido instantáneo (v14)
+
+- **Pares de letras**: los ejemplos empiezan con palabras de piratas (pirata, calamar, timón, barco, espada, cofre, loro…) y chistosas (chancla, calzón, panza, moco, sobaco…). Hasta 7 por par. Migración `contentV13` refresca los pares del catálogo y conserva los añadidos a mano.
+- **Películas**: 45 (se sumaron Vaselina, Dumbo, Toy Story, Mi villano favorito, Madagascar…). La migración solo agrega las que faltan.
+- **Frase de la plancha** (`MCR.ui.plank`): en la pantalla final, quien pierde ve «🏴‍☠️ ¡X tendrá que caminar por la plancha!». Te la compro: si cumplió quien apostó, sale quien compró con «🦈 ¡A X lo arrojaremos a los tiburones!».
+- **Sonido de error**: `sounds/error.wav` es el buzzer sin los 1.75 s de silencio inicial. Se precarga al primer toque y se toca desde memoria con Web Audio.
