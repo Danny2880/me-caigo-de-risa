@@ -3337,11 +3337,9 @@ details > summary { color: var(--ink); }
 .game-rules-page .rule-guide-steps { font-size: 18px; color: var(--ink); }
 .rule-origin { margin: 0; font-size: 14px; color: var(--muted); }
 
-/* ---------- botones de sonido (✓ correcto / ✕ error) ---------- */
-.sfx-btn { font-size: 22px; font-weight: 900; }
-.sfx-ok { color: var(--ok-ink, #15803d); border-color: var(--ok-line, #86efac); background: var(--ok-bg, #f0fdf4); }
-.sfx-err { color: var(--danger-ink, #b91c1c); border-color: var(--danger-line, #fca5a5); background: var(--danger-bg, #fef2f2); }
-.sfx-btn:active { transform: scale(.92); }
+/* ---------- botón de error (Caricaturas) ---------- */
+.sfx-error-btn { margin-left: auto; }
+.sfx-error-btn + .btn { margin-left: 0; }
 
 /* ---------- Sándwich: ejemplos para quien conduce ---------- */
 .sw-examples { border: 1px dashed var(--line); background: var(--surface-2); color: var(--ink); border-radius: 10px; padding: 6px 12px; font-size: 15px; font-weight: 600; cursor: pointer; }

@@ -482,9 +482,10 @@ MCR.ui = (function () {
      queda guardada (MCR.store.live) y se ofrece continuarla al volver. */
   let visualMode = false;
 
-  /* ---------- efectos de sonido (botones ✓ / ✕ del encabezado) ----------
+  /* ---------- efectos de sonido ----------
      Error: sounds/error.mp3. Correcto: campanita generada con Web Audio,
-     así no depende de ningún archivo. Se pueden tocar en cualquier momento. */
+     así no depende de ningún archivo. Se usan en Caricaturas (botón «✕ ¡Error!»),
+     Te la compro (veredicto) y Teléfono (respuesta final). */
   const sfx = (() => {
     let ctx = null;
     let errAudio = null;
@@ -525,7 +526,11 @@ MCR.ui = (function () {
         tone(140, 0, 0.6, 'sawtooth', 0.3);
       }
     }
-    return { ok, error };
+    /* Botón grande de error para el momento en que alguien se equivoca. */
+    function errorButton() {
+      return h('button', { class: 'btn btn-danger btn-xl sfx-error-btn', title: 'Suena el sonido de error', onclick: error }, '✕ ¡Error!');
+    }
+    return { ok, error, errorButton };
   })();
 
   function shell(opts) {
@@ -564,10 +569,7 @@ MCR.ui = (function () {
         h('span', { class: 'gt-name' }, opts.title),
         opts.sub ? h('span', { class: 'gt-sub' }, opts.sub) : null
       ),
-      h('div', { class: 'game-actions' }, opts.right || null, swapBtn,
-        h('button', { class: 'icon-btn sfx-btn sfx-ok', title: 'Sonido de correcto', 'aria-label': 'Sonido de correcto', onclick: sfx.ok }, '✓'),
-        h('button', { class: 'icon-btn sfx-btn sfx-err', title: 'Sonido de error', 'aria-label': 'Sonido de error', onclick: sfx.error }, '✕'),
-        eye)
+      h('div', { class: 'game-actions' }, opts.right || null, swapBtn, eye)
     );
 
     const body = h('div', { class: 'game-body' });

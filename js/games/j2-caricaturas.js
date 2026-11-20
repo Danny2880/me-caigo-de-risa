@@ -189,6 +189,7 @@ MCR.screens = MCR.screens || {};
         // La acción que se repite toda la partida va en el pie, en el mismo lugar que «Continuar».
         h('div', { class: 'action-bar' },
           h('div', { class: 'action-bar-info' }, '¿Alguien repitió, se trabó o tardó? Sale y entra un reemplazo.'),
+          MCR.ui.sfx.errorButton(),
           h('button', { class: 'btn btn-gold btn-xl', onclick: () => { S.step = 'eliminar'; MCR.go('game:caricaturas'); } }, '🔄 Cambio →')
         )
       );
@@ -324,6 +325,7 @@ MCR.screens = MCR.screens || {};
       ),
       h('div', { class: 'action-bar' },
         h('div', { class: 'action-bar-info' }, winSel ? 'Se confirma al tocar el botón' : 'Toca a quien ganó'),
+        MCR.ui.sfx.errorButton(),
         MCR.ui.confirmBtn(winSel, (n) => '🏆 Confirmar · ganó ' + n, (id) => {
           S.sel = null;
           S.winner = id;

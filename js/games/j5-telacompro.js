@@ -361,11 +361,11 @@ MCR.screens = MCR.screens || {};
         h('div', { class: 'stage-note' }, nm(S.challenged) + ' debe decir ' + words(lb.n) + ' de «' + S.category.name + '», sin repetir.')
       ),
       h('div', { class: 'tlc-verdict' },
-        h('button', { class: 'btn btn-ok tlc-btn', onclick: () => eliminate(S.buyer, 'cumplió') },
+        h('button', { class: 'btn btn-ok tlc-btn', onclick: () => { MCR.ui.sfx.ok(); eliminate(S.buyer, 'cumplió'); } },
           h('span', { class: 'tlc-btn-main' }, '✓ Sí lo logró'),
           h('span', { class: 'tlc-btn-sub' }, 'Sale ' + nm(S.buyer) + ' (compró)')
         ),
-        h('button', { class: 'btn btn-danger tlc-btn', onclick: () => eliminate(S.challenged, 'no cumplió') },
+        h('button', { class: 'btn btn-danger tlc-btn', onclick: () => { MCR.ui.sfx.error(); eliminate(S.challenged, 'no cumplió'); } },
           h('span', { class: 'tlc-btn-main' }, '✕ No lo logró'),
           h('span', { class: 'tlc-btn-sub' }, 'Sale ' + nm(S.challenged) + ' (apostó)')
         )

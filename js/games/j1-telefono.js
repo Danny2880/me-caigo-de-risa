@@ -741,8 +741,8 @@ MCR.screens = MCR.screens || {};
         h('div', { class: 'stage-note' }, '¿La respuesta coincide con la película?')
       ),
       h('div', { class: 'action-bar' },
-        h('button', { class: 'btn btn-danger btn-xl', onclick: () => close(false) }, '✕ No adivinó'),
-        h('button', { class: 'btn btn-ok btn-xl', onclick: () => close(true) }, '✓ Sí adivinó')
+        h('button', { class: 'btn btn-danger btn-xl', onclick: () => { MCR.ui.sfx.error(); close(false); } }, '✕ No adivinó'),
+        h('button', { class: 'btn btn-ok btn-xl', onclick: () => { MCR.ui.sfx.ok(); close(true); } }, '✓ Sí adivinó')
       )
     );
   }
