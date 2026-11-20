@@ -275,6 +275,19 @@ MCR.screens = MCR.screens || {};
   function nextPair() {
     if (S.idx >= S.deck.length) buildDeck();
     S.pair = S.deck[S.idx++] || null;
+    S.showEx = false;
+  }
+
+  /* Ejemplos del par, solo para quien conduce: se abren con un toque y se
+     cierran solos al cambiar de par. En modo público no se muestran. */
+  function examples(enabled) {
+    if (!S.pair || !S.pair.ex) return null;
+    if (!S.showEx) {
+      return h('button', { class: 'btn btn-quiet mini', disabled: !enabled,
+        onclick: () => { S.showEx = true; MCR.go('game:sandwich'); } }, '👀 Ejemplos');
+    }
+    return h('button', { class: 'sw-examples', title: 'Ocultar ejemplos',
+      onclick: () => { S.showEx = false; MCR.go('game:sandwich'); } }, '👀 ' + S.pair.ex);
   }
 
   function resolvePair() {
@@ -368,6 +381,7 @@ MCR.screens = MCR.screens || {};
       ),
       h('div', { class: 'play-tools hide-in-visual' },
         h('button', { class: 'btn btn-quiet mini', disabled: !live, onclick: () => { resolvePair(); MCR.go('game:sandwich'); } }, 'Nadie la encuentra · saltar par'),
+        examples(live),
         S.log.length ? h('button', { class: 'btn btn-quiet mini', onclick: undo }, '↶ Deshacer último punto') : null,
         h('span', { class: 'sw-mini-score', title: 'Marcador' }, 'Marcador ' + S.score[0] + ' — ' + S.score[1])
       ),
@@ -385,6 +399,7 @@ MCR.screens = MCR.screens || {};
         letters(false),
         h('div', { class: 'stage-note' }, 'Sin reloj. El primer equipo que diga una palabra válida gana.')
       ),
+      h('div', { class: 'play-tools hide-in-visual' }, examples(true)),
       h('div', { class: 'sw-points' },
         pointBtn(0, true, () => win(0), '🏆 Equipo 1'),
         pointBtn(1, true, () => win(1), '🏆 Equipo 2')

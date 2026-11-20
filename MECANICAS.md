@@ -238,3 +238,11 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 - Cada página de reglas abre con **«🎤 Para explicarlo en voz alta»**: 3–4 frases en tono de conductor para leer tal cual antes de jugar (`script` en `gameRulesPage`). Debajo, en gris, el juego del programa en que se basa (`origin`), solo cuando está confirmado:
   Teléfono descompuesto, Caricaturas eléctricas y Te la compro (mismo nombre); Cascarón Piratas ← «¡Échale huevos!»; Sin palabras ← «Ni hablar». Almohadazo y Sándwich no tienen origen confirmado.
 - **Rebeca** se agregó a la lista base. En tabletas que ya tenían datos, `addLatePlayers` (store.js) la añade o la reactiva una sola vez sin tocar a nadie más. Para sumar a alguien más en el futuro, agrégalo a `seedPlayers` y a la lista `late` de esa función.
+
+## 16. Contenido nuevo, ejemplos y sonidos (v12)
+
+- **Sin palabras**: 174 palabras (se sumaron recetario, escenario, barco y otras con sílabas muy marcadas: R, M, D, O, B).
+- **Categorías**: 9 nuevas (pizza, bolsa de una mujer, ponche, salsas, árboles frutales, animales de cuatro patas, criaturas mitológicas, quesos, nombres de hombre con G). En Caricaturas y Te la compro se muestran en **orden alfabético**.
+- **Pares de letras**: catálogo de 135 pares fáciles; cada uno trae hasta 5 ejemplos (`ex`). Se quitaron los difíciles (X, Ñ, K, Q–R…). En la partida, «👀 Ejemplos» los muestra solo a quien conduce (se ocultan en modo público y al cambiar de par). En el gestor, los pares tienen un campo «Ejemplos».
+- **Migración `contentV12`** (store.js): suma categorías y palabras sin borrar lo personalizado; reemplaza los pares del catálogo (id `lp…`) y conserva los añadidos a mano.
+- **Sonidos**: botones ✓ (correcto) y ✕ (error) en el encabezado de todos los juegos, también en modo público. Error = `sounds/error.mp3`; correcto = campanita generada con Web Audio (`MCR.ui.sfx`).

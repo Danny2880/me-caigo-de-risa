@@ -16,3 +16,6 @@ node_modules/
 
 # Netlify local
 .netlify/
+
+# Descargas temporales
+tmp/

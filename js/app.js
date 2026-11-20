@@ -599,7 +599,7 @@ console.info('Me caigo de risa · build', MCR.BUILD);
     lipWords:    { label: 'Sin palabras', fields: [{ k: 'w', l: 'Palabra' }], strings: true },
     syllablesIni:{ label: 'Sílabas',     fields: [{ k: 's', l: 'Sílaba' }] },
     syllablesFin:{ label: 'Terminaciones', fields: [{ k: 's', l: 'Terminación' }] },
-    letterPairs: { label: 'Pares de letras', fields: [{ k: 'a', l: 'Inicial' }, { k: 'b', l: 'Final' }] },
+    letterPairs: { label: 'Pares de letras', fields: [{ k: 'a', l: 'Inicial' }, { k: 'b', l: 'Final' }, { k: 'ex', l: 'Ejemplos (separados por coma)' }] },
     categories:  { label: 'Categorías',  fields: [{ k: 'name', l: 'Categoría' }] }
   };
 
@@ -610,7 +610,7 @@ console.info('Me caigo de risa · build', MCR.BUILD);
   function summary(def, item) {
     if (def.strings) return item;
     if (tab === 'movies') return item.title;
-    if (tab === 'letterPairs') return item.a + ' — ' + item.b;
+    if (tab === 'letterPairs') return item.a + ' — ' + item.b + (item.ex ? '  ·  ' + item.ex : '');
     if (tab === 'categories') return item.name;
     return item.s || '';
   }
@@ -624,6 +624,7 @@ console.info('Me caigo de risa · build', MCR.BUILD);
     } else {
       const obj = { id: MCR.store.uid('ct_') };
       def.fields.forEach((f) => { obj[f.k] = String(values[f.k] || '').trim(); });
+      if (tab === 'letterPairs') { obj.a = obj.a.toUpperCase(); obj.b = obj.b.toUpperCase(); }
       if (!obj[def.fields[0].k]) return;
       content[tab].push(obj);
     }

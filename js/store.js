@@ -107,6 +107,26 @@ MCR.store = (function () {
       st.settings.categoryCatalogV3 = true;
       save();
     }
+    /* v12: categorías y palabras nuevas se suman sin borrar lo personalizado;
+       los pares de letras del catálogo (id «lp…») se reemplazan por la lista
+       fácil con ejemplos y se conservan los pares añadidos a mano. */
+    if (!st.settings.contentV12) {
+      const catNames = new Set(content.categories.map((c) => normName(c.name)));
+      MCR.data.categories.forEach((c) => {
+        if (!catNames.has(normName(c.name))) { content.categories.push(clone(c)); catNames.add(normName(c.name)); }
+      });
+      content.lipWords = content.lipWords || [];
+      const words = new Set(content.lipWords.map(normName));
+      MCR.data.lipWords.forEach((w) => {
+        if (!words.has(normName(w))) { content.lipWords.push(w); words.add(normName(w)); }
+      });
+      const custom = (content.letterPairs || []).filter((p) => !/^lp\d+$/.test(p.id || ''));
+      content.letterPairs = clone(MCR.data.letterPairs).concat(custom);
+      st.used = st.used || {};
+      st.used.letterPairs = (st.used.letterPairs || []).filter((id) => content.letterPairs.some((p) => p.id === id));
+      st.settings.contentV12 = true;
+      save();
+    }
     if (!content.auction.length && !(st.used && st.used.auction || []).length) return;
 
     const byName = new Map();

@@ -482,6 +482,52 @@ MCR.ui = (function () {
      queda guardada (MCR.store.live) y se ofrece continuarla al volver. */
   let visualMode = false;
 
+  /* ---------- efectos de sonido (botones ✓ / ✕ del encabezado) ----------
+     Error: sounds/error.mp3. Correcto: campanita generada con Web Audio,
+     así no depende de ningún archivo. Se pueden tocar en cualquier momento. */
+  const sfx = (() => {
+    let ctx = null;
+    let errAudio = null;
+    function audioCtx() {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      if (!ctx) ctx = new AC();
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    }
+    function tone(freq, start, dur, type, vol) {
+      const c = audioCtx();
+      if (!c) return;
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = type || 'sine';
+      o.frequency.value = freq;
+      const t = c.currentTime + start;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.35, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(c.destination);
+      o.start(t);
+      o.stop(t + dur + 0.05);
+    }
+    function ok() {
+      tone(880, 0, 0.18, 'triangle', 0.4);
+      tone(1318.5, 0.12, 0.45, 'triangle', 0.4);
+    }
+    function error() {
+      try {
+        if (!errAudio) errAudio = new Audio('sounds/error.mp3');
+        errAudio.pause();
+        errAudio.currentTime = 0;
+        const p = errAudio.play();
+        if (p && p.catch) p.catch(() => { tone(140, 0, 0.6, 'sawtooth', 0.3); });
+      } catch (e) {
+        tone(140, 0, 0.6, 'sawtooth', 0.3);
+      }
+    }
+    return { ok, error };
+  })();
+
   function shell(opts) {
     const root = h('div', { class: 'game' + (visualMode ? ' visual' : '') });
     const eye = h('button', {
@@ -518,7 +564,10 @@ MCR.ui = (function () {
         h('span', { class: 'gt-name' }, opts.title),
         opts.sub ? h('span', { class: 'gt-sub' }, opts.sub) : null
       ),
-      h('div', { class: 'game-actions' }, opts.right || null, swapBtn, eye)
+      h('div', { class: 'game-actions' }, opts.right || null, swapBtn,
+        h('button', { class: 'icon-btn sfx-btn sfx-ok', title: 'Sonido de correcto', 'aria-label': 'Sonido de correcto', onclick: sfx.ok }, '✓'),
+        h('button', { class: 'icon-btn sfx-btn sfx-err', title: 'Sonido de error', 'aria-label': 'Sonido de error', onclick: sfx.error }, '✕'),
+        eye)
     );
 
     const body = h('div', { class: 'game-body' });
@@ -1426,6 +1475,6 @@ MCR.ui = (function () {
     h, clear, fmt, durationText, durationPicker, initials, avatar, toast, dialog, confirm, reveal, swapPlayer, withSwapped, choiceGrid, confirmBtn, ring, countdown,
     newTimer, timerView, endGame, recordWithUndo, finishBar,
     shell, gameNavigation, playerGrid, playerMeta, peoplePicker, fairOrder, searchIcon, picker, playerList, quickAdd,
-    columnOrder, setupHead, stepBar, gameFlow, gameIntro, gameRulesPage, ruleGuide, teamRow, teamBoard, teamBalance
+    sfx, columnOrder, setupHead, stepBar, gameFlow, gameIntro, gameRulesPage, ruleGuide, teamRow, teamBoard, teamBalance
   };
 })();

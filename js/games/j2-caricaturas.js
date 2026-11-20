@@ -140,7 +140,7 @@ MCR.screens = MCR.screens || {};
     const cats = MCR.store.get().content.categories;
     const usedSet = new Set(MCR.store.used('categories'));
     const usedCount = cats.filter((c) => usedSet.has(c.id)).length;
-    const ordered = cats;
+    const ordered = cats.slice().sort((a, b) => String(a.name).localeCompare(String(b.name), 'es', { sensitivity: 'base' }));
     const wrap = h('div', { class: 'opt-grid category-grid' });
 
     ordered.forEach((c) => {
