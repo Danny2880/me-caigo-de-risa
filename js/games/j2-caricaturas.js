@@ -73,6 +73,8 @@ MCR.screens = MCR.screens || {};
   function viewRules() {
     return MCR.ui.gameRulesPage({
       title: 'Caricaturas eléctricas',
+      script: '¡Tres valientes al frente! Les doy una categoría y, por turnos, cada quien dice algo que entre ahí: rapidito y sin repetir. ¿Te trabaste? ¿Repetiste? ¡Fuera! Entra alguien más y seguimos. Las dos últimas personas se juegan la final.',
+      origin: 'En el programa: «Caricaturas eléctricas». Ahí, quien falla recibe una descarga y se va al sillón de la vergüenza.',
       goal: 'Ser la última persona en pie diciendo palabras de la categoría sin repetir ni trabarse.',
       steps: [
         'Arrancan tres personas. Quien conduce elige una categoría en la tablet y la anuncia en voz alta.',

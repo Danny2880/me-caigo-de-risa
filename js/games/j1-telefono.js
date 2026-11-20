@@ -110,6 +110,8 @@ MCR.screens = MCR.screens || {};
     return MCR.ui.gameRulesPage({
       title: 'Teléfono descompuesto',
       headerSub: 'Puedes leerlo en voz alta tal cual.',
+      script: '¡Fórmense en fila y denle la espalda a quien va adelante! La primera persona ve una película y, sin decir ni pío, se la actúa a quien sigue en 10 segundos. Esa persona se la pasa a la siguiente… y la última tiene que adivinar cuál era. ¿Llegará la película o llegará otra cosa?',
+      origin: 'En el programa: «Teléfono descompuesto», con el mismo nombre.',
       goal: 'Que la película llegue intacta desde la primera persona de la fila hasta la última, usando solo mímica.',
       steps: [
         'Cada equipo forma una fila, todos de espaldas a quien va adelante. Juega un equipo y luego el otro, cada uno con su propia película.',

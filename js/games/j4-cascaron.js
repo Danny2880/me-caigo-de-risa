@@ -60,6 +60,8 @@ MCR.screens = MCR.screens || {};
   function viewRules() {
     return MCR.ui.gameRulesPage({
       title: 'Cascarón Piratas',
+      script: '¡Dos filas, frente a frente! Las primeras personas de cada fila se enfrentan a piedra, papel o tijera, pero gritando «¡Pi-ra-tas!». Quien gana se salva; quien pierde se va al final de su fila a esperar otra oportunidad. Y la última persona que quede… ¡se lleva el cascarón!',
+      origin: 'Inspirado en «¡Échale huevos!» del programa.',
       goal: 'Salvarte ganando un duelo antes de que te conviertas en la última persona en riesgo.',
       steps: [
         'El grupo se divide en dos filas, una frente a la otra.',

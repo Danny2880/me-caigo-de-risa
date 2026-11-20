@@ -232,3 +232,9 @@ Elegir a una persona nunca avanza con un solo toque: el toque marca (✓) y el b
 3. El reloj es compacto arriba a la derecha (`.ring.compact`); los contadores y marcadores van discretos.
 - Sándwich: marcador discreto durante la partida («lleva N» dentro de cada botón); al final, marcador grande por equipo con sus integrantes.
 - Sin palabras: palabras largas (>9 letras) usan un tamaño adaptado para no partirse.
+
+## 15. Guion para explicar y origen del juego (v12)
+
+- Cada página de reglas abre con **«🎤 Para explicarlo en voz alta»**: 3–4 frases en tono de conductor para leer tal cual antes de jugar (`script` en `gameRulesPage`). Debajo, en gris, el juego del programa en que se basa (`origin`), solo cuando está confirmado:
+  Teléfono descompuesto, Caricaturas eléctricas y Te la compro (mismo nombre); Cascarón Piratas ← «¡Échale huevos!»; Sin palabras ← «Ni hablar». Almohadazo y Sándwich no tienen origen confirmado.
+- **Rebeca** se agregó a la lista base. En tabletas que ya tenían datos, `addLatePlayers` (store.js) la añade o la reactiva una sola vez sin tocar a nadie más. Para sumar a alguien más en el futuro, agrégalo a `seedPlayers` y a la lista `late` de esa función.

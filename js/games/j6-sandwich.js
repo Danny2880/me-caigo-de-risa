@@ -75,6 +75,7 @@ MCR.screens = MCR.screens || {};
   function viewRules() {
     return MCR.ui.gameRulesPage({
       title: 'Sándwich de letras',
+      script: 'Dos equipos, dos letras: una para empezar y otra para terminar. Por ejemplo, P y A… ¡Pizza! El primer equipo que grite una palabra que quepa en ese sándwich se lleva el punto. Cuando se acabe el reloj, gana el equipo con más puntos.',
       goal: 'Que tu equipo encuentre más palabras «sándwich»: que empiecen con una letra y terminen con otra.',
       steps: [
         'Se forman dos equipos y se fija la duración de la ronda.',

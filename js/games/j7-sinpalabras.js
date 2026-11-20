@@ -76,6 +76,8 @@ MCR.screens = MCR.screens || {};
   function viewRules() {
     return MCR.ui.gameRulesPage({
       title: 'Sin palabras',
+      script: 'Una persona se pone audífonos con la música a todo volumen. Su pareja le dice palabras… ¡pero solo moviendo los labios! Sin voz y sin señas. Cuantas más adivinen antes de que se acabe el tiempo, más puntos. Gana la pareja con más palabras.',
+      origin: 'Inspirado en «Ni hablar» del programa, donde una frase se pasa leyendo los labios con audífonos puestos.',
       goal: 'Adivinar el mayor número de palabras leyendo los labios de tu pareja.',
       steps: [
         'Se juega por parejas, una pareja a la vez. Una persona se pone audífonos con música alta (🎧 adivina) y la otra mira la tablet (🗣️ dice).',

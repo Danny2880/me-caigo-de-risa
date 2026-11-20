@@ -10,7 +10,7 @@ MCR.data = {
     'Daniela Delgadillo', 'Fernando Ferrer', 'Mitzi', 'Samuel', 'Jaziel Cruz',
     'Itzel Hernández', 'Jessica Ramírez', 'Alejandra Tlatenchi', 'José Antonio',
     'Paola Campos', 'Itzel Bustamante', 'Bogar', 'Giselle', 'Marcelo Arriaga',
-    'Ana Paula', 'Betsi'
+    'Ana Paula', 'Betsi', 'Rebeca'
   ],
 
   /* Nombres anteriores de la misma persona: la migración de la lista (store.js)

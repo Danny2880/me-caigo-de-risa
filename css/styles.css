@@ -3332,3 +3332,8 @@ details > summary { color: var(--ink); }
   .stage-word.hero { font-size: clamp(44px, 15vw, 76px); }
   .stage-word.hero.long { font-size: clamp(28px, 9vw, 42px); }
 }
+
+/* ---------- reglas: guion para leer en voz alta ---------- */
+.rule-script { padding: 16px 18px; border-radius: 14px; background: var(--surface-2); border-left: 4px solid var(--violet); }
+.rule-script-text { margin: 0; font-size: 19px; line-height: 1.5; font-weight: 600; color: var(--ink); }
+.rule-origin { margin: 0; font-size: 14px; color: var(--muted); }

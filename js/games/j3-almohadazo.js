@@ -91,6 +91,7 @@ MCR.screens = MCR.screens || {};
   function viewRules() {
     return MCR.ui.gameRulesPage({
       title: 'Almohadazo',
+      script: '¡Uno contra uno, plumón en mano! Les doy una sílaba y escriben en el pizarrón todas las palabras que empiecen —o terminen— con ella antes de que se acabe el tiempo. Mismo reloj para los dos. Gana quien llene más el pizarrón.',
       goal: 'Escribir en el pizarrón más palabras válidas que tu rival.',
       steps: [
         'Se enfrentan dos personas. Cada una juega su propio turno, con una consigna distinta.',

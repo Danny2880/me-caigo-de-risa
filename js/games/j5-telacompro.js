@@ -75,6 +75,8 @@ MCR.screens = MCR.screens || {};
   function viewRules() {
     return MCR.ui.gameRulesPage({
       title: 'Te la compro',
+      script: 'Les doy una categoría y empieza la subasta: «Yo digo cuatro», «¡Yo cinco!». Sube la apuesta… o, si crees que alguien está echando mentiras, dile «¡Te la compro!». Si cumple, sales tú; si no cumple, sale quien apostó. Al final queda una sola persona.',
+      origin: 'En el programa: «Te la compro», con el mismo nombre.',
       goal: 'Ser la última persona en la subasta: apuesta con valor, pero no prometas más de lo que puedes cumplir.',
       steps: [
         'Se anuncia una categoría. Quien abre la ronda hace la apuesta inicial: cuántas palabras de esa categoría puede decir («yo digo 4»).',

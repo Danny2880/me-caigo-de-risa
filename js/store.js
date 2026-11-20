@@ -156,6 +156,7 @@ MCR.store = (function () {
     state.used = state.used || { movies: [], letterPairs: [], categories: [], auction: [] };
     migrateContent(state);
     migrateRoster(state);
+    addLatePlayers(state);
     return state;
   }
 
@@ -184,6 +185,21 @@ MCR.store = (function () {
     });
     st.players.forEach((p) => { if (!keep.has(p.id) && !p.archived) p.absent = true; });
     st.settings.rosterNov2026 = true;
+    save();
+  }
+
+  /* Personas que se suman a la lista después de la migración de nov 2026.
+     Se añaden (o se reactivan) una sola vez, sin tocar a nadie más. */
+  function addLatePlayers(st) {
+    const late = ['Rebeca'];
+    st.settings.latePlayersAdded = st.settings.latePlayersAdded || [];
+    late.forEach((name) => {
+      if (st.settings.latePlayersAdded.includes(name)) return;
+      const p = st.players.find((x) => normName(x.name) === normName(name));
+      if (p) { delete p.absent; delete p.archived; }
+      else st.players.push({ id: uid('pl_'), name });
+      st.settings.latePlayersAdded.push(name);
+    });
     save();
   }
 
